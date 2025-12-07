@@ -18,11 +18,47 @@ export function WeightageSliders({ weights, onChange }: WeightageSlidersProps) {
   const sum = getWeightagesSum(weights);
   const isValid = sum === 100;
 
+  const weightKeys = Object.keys(weights) as Array<keyof EvaluationWeights>;
+
   const handleChange = (key: keyof EvaluationWeights, value: number) => {
-    onChange({
-      ...weights,
-      [key]: value,
-    });
+    const newWeights = { ...weights, [key]: value };
+    const newSum = getWeightagesSum(newWeights);
+    const difference = newSum - 100;
+
+    // If the sum is not 100, auto-adjust another slider
+    if (difference !== 0) {
+      const currentIndex = weightKeys.indexOf(key);
+      const lastIndex = weightKeys.length - 1;
+
+      // If changing the last slider, adjust the second-last
+      // Otherwise, adjust the last slider
+      const adjustKey =
+        currentIndex === lastIndex
+          ? weightKeys[lastIndex - 1]
+          : weightKeys[lastIndex];
+
+      // Adjust the target slider, ensuring it doesn't go below 0
+      const adjustedValue = Math.max(0, newWeights[adjustKey] - difference);
+      newWeights[adjustKey] = adjustedValue;
+
+      // If adjustment would make it negative, redistribute the overflow
+      if (newWeights[adjustKey] === 0 && difference > 0) {
+        // Find another slider to adjust (go backwards from last)
+        for (let i = lastIndex; i >= 0; i--) {
+          const candidateKey = weightKeys[i];
+          if (candidateKey !== key && candidateKey !== adjustKey) {
+            const remainingDiff = newSum - getWeightagesSum(newWeights);
+            newWeights[candidateKey] = Math.max(
+              0,
+              newWeights[candidateKey] - remainingDiff
+            );
+            break;
+          }
+        }
+      }
+    }
+
+    onChange(newWeights);
   };
 
   return (

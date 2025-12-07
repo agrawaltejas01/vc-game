@@ -372,7 +372,8 @@ export const generateInvestorVector = (scenarioIndex: number, profile: InvestorP
       },
       qualitative_insights: [
         'Initial profile established',
-        `Focus on ${profile.preferred_sectors[0]} sector`,
+        // `Focus on ${profile.preferred_sectors[0]} sector`,
+        `Focus on fintech sector`,
       ],
       decision_patterns: [],
       risk_tolerance: 'Baseline established',
@@ -533,10 +534,16 @@ export const generateGameSummary = (profile: InvestorProfile): GameSummary => {
         insights: 'Despite stating traction as important, you were comfortable backing pre-revenue and pre-product companies when other factors (team, technology) were compelling.',
       },
       {
-        stated_preference: `Sector focus: ${profile.preferred_sectors.join(', ')}`,
-        revealed_preference: 'Broader sector appetite than stated',
+        stated_preference: `Geography focus: ${profile.geography_focus.join(', ')}`,
+        revealed_preference: 'Broader geography appetite than stated',
         alignment: 'partially_aligned',
-        insights: 'You showed willingness to invest outside your stated sectors when team quality and market opportunity were exceptional.',
+        insights: 'You showed willingness to invest in geographies beyond your stated focus when team quality and market opportunity were exceptional.',
+      },
+      {
+        stated_preference: `Cheque size: $${(profile.cheque_size_min_usd / 1000).toFixed(0)}K - $${(profile.cheque_size_max_usd / 1000000).toFixed(1)}M`,
+        revealed_preference: 'Flexible on cheque sizes for high-conviction opportunities',
+        alignment: 'aligned',
+        insights: 'Your investment decisions stayed within your stated cheque size range while showing flexibility for exceptional opportunities.',
       },
     ],
     evaluation_breakdown: {

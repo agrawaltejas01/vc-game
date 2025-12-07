@@ -41,6 +41,8 @@ export async function createInvestorProfile(
 
     const investorId = generateId();
     mockStorage.profiles.set(investorId, profile);
+    console.log("Inside set mock profile")
+    console.log(profile)
     mockStorage.currentScenarioIndex.set(investorId, 0);
     mockStorage.responses.set(investorId, []);
 
@@ -69,6 +71,7 @@ export async function getNextScenario(
   gameState: GameState
 ): Promise<GetNextScenarioResponse> {
   if (apiClient.isUsingMock()) {
+    console.log("Mocking get scenario");
     // Mock implementation
     await delay(1000);
 
@@ -77,10 +80,14 @@ export async function getNextScenario(
       throw new Error('Investor ID is required');
     }
 
+    console.log(investorId)
+
     const profile = mockStorage.profiles.get(investorId);
     if (!profile) {
       throw new Error('Investor profile not found');
     }
+
+    console.log(profile)
 
     const currentIndex = gameState.current_index;
     if (currentIndex >= mockScenarios.length) {
@@ -89,8 +96,9 @@ export async function getNextScenario(
 
     const scenario = mockScenarios[currentIndex];
     const investorVector = generateInvestorVector(currentIndex, profile);
+    console.log("Generate investor vector");
 
-    return {
+    let data = {
       scenario: {
         ...scenario,
         investor_vector: investorVector,
@@ -98,6 +106,12 @@ export async function getNextScenario(
       investor_vector: investorVector,
       has_more: currentIndex < mockScenarios.length - 1,
     };
+
+    console.log(data)
+
+    return data
+
+    
   }
 
   // Real API call
@@ -119,14 +133,14 @@ export async function getNextScenario(
 export async function submitScenarioResponse(payload: {
   investor_id: string;
   scenario_id: string;
-  text_response?: string;
+  decision: 'pass' | 'invest';
   audio_response?: Blob;
 }): Promise<SubmitResponseResponse> {
   if (apiClient.isUsingMock()) {
     // Mock implementation
     await delay(1200);
 
-    const { investor_id, scenario_id, text_response, audio_response } = payload;
+    const { investor_id, scenario_id, decision, audio_response } = payload;
 
     const profile = mockStorage.profiles.get(investor_id);
     if (!profile) {
@@ -137,7 +151,7 @@ export async function submitScenarioResponse(payload: {
     const responses = mockStorage.responses.get(investor_id) || [];
     responses.push({
       scenario_id,
-      text_response,
+      decision,
       has_audio: !!audio_response,
       timestamp: new Date().toISOString(),
     });
@@ -168,9 +182,7 @@ export async function submitScenarioResponse(payload: {
     const formData = new FormData();
     formData.append('investor_id', payload.investor_id);
     formData.append('scenario_id', payload.scenario_id);
-    if (payload.text_response) {
-      formData.append('text_response', payload.text_response);
-    }
+    formData.append('decision', payload.decision);
     formData.append('audio_response', payload.audio_response);
     body = formData;
     // Don't set Content-Type header - browser will set it with boundary for FormData
@@ -179,11 +191,11 @@ export async function submitScenarioResponse(payload: {
     body = JSON.stringify({
       investor_id: payload.investor_id,
       scenario_id: payload.scenario_id,
-      text_response: payload.text_response,
+      decision: payload.decision,
     });
   }
 
-  const response = await fetch(`${apiClient['baseUrl']}/game/scenario-response`, {
+  const response = await fetch(`${apiClient['baseUrl']}/game/next`, {
     method: 'POST',
     headers,
     body,

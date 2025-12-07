@@ -22,6 +22,7 @@ export function AudioRecorder({ audioBlob, onAudioChange, disabled = false }: Au
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
   // Sync recorded blob to parent
   useEffect(() => {
@@ -29,6 +30,21 @@ export function AudioRecorder({ audioBlob, onAudioChange, disabled = false }: Au
       onAudioChange(recordedBlob);
     }
   }, [recordedBlob]);
+
+  // Create and cleanup object URL for audio playback
+  useEffect(() => {
+    if (audioBlob) {
+      const url = URL.createObjectURL(audioBlob);
+      setAudioUrl(url);
+
+      // Cleanup function to revoke URL when component unmounts or audioBlob changes
+      return () => {
+        URL.revokeObjectURL(url);
+      };
+    } else {
+      setAudioUrl(null);
+    }
+  }, [audioBlob]);
 
   const handleStartRecording = async () => {
     const started = await startRecording();
@@ -54,7 +70,7 @@ export function AudioRecorder({ audioBlob, onAudioChange, disabled = false }: Au
   };
 
   const togglePlayback = () => {
-    if (!audioRef.current || !audioBlob) return;
+    if (!audioRef.current || !audioUrl) return;
 
     if (isPlaying) {
       audioRef.current.pause();
@@ -64,9 +80,6 @@ export function AudioRecorder({ audioBlob, onAudioChange, disabled = false }: Au
       setIsPlaying(true);
     }
   };
-
-  // Create object URL for audio playback
-  const audioUrl = audioBlob ? URL.createObjectURL(audioBlob) : null;
 
   return (
     <div className="space-y-3">
