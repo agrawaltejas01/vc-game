@@ -1,0 +1,162 @@
+import { Scenario } from '../../types/scenario';
+
+interface ScenarioDetailsProps {
+  scenario: Scenario;
+}
+
+export function ScenarioDetails({ scenario }: ScenarioDetailsProps) {
+  const { business, founder_profile, round_details, traction_snapshot, tension, info_gaps, question_to_investor } = scenario;
+
+  return (
+    <div className="space-y-6">
+      {/* Header: Stage & Sector */}
+      <div className="flex flex-wrap gap-2">
+        <span className="badge-primary">{scenario.stage}</span>
+        <span className="badge-secondary">{scenario.sector}</span>
+      </div>
+
+      {/* Business Overview */}
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-3">{business.one_liner}</h2>
+        <div className="prose prose-sm max-w-none text-gray-700">
+          <p>{business.description}</p>
+        </div>
+        <div className="mt-3">
+          <p className="text-sm text-gray-600">
+            <strong>Business Model:</strong> {business.business_model}
+          </p>
+          {(business.is_pre_product || business.is_pre_revenue) && (
+            <div className="mt-2">
+              {business.is_pre_product && (
+                <span className="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+                  Pre-product
+                </span>
+              )}
+              {business.is_pre_revenue && !business.is_pre_product && (
+                <span className="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+                  Pre-revenue
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Founder Profile */}
+      <div className="card bg-gray-50">
+        <h3 className="text-lg font-semibold text-gray-900 mb-3">Founders & Team</h3>
+        <p className="text-gray-700 mb-3">{founder_profile.summary}</p>
+        <ul className="space-y-2">
+          {founder_profile.team_bullets.map((bullet, idx) => (
+            <li key={idx} className="text-sm text-gray-700 flex items-start">
+              <span className="text-primary-600 mr-2">•</span>
+              <span>{bullet}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Round Details */}
+      <div className="card bg-blue-50">
+        <h3 className="text-lg font-semibold text-gray-900 mb-3">Round Details</h3>
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <p className="text-gray-600">Round Type</p>
+            <p className="font-semibold text-gray-900">{round_details.round_type}</p>
+          </div>
+          <div>
+            <p className="text-gray-600">Total Round</p>
+            <p className="font-semibold text-gray-900">${(round_details.total_size / 1000000).toFixed(1)}M</p>
+          </div>
+          {round_details.valuation && (
+            <div>
+              <p className="text-gray-600">Valuation</p>
+              <p className="font-semibold text-gray-900">${(round_details.valuation / 1000000).toFixed(1)}M</p>
+            </div>
+          )}
+          <div>
+            <p className="text-gray-600">Ask Amount</p>
+            <p className="font-semibold text-gray-900">${(round_details.ask_amount / 1000000).toFixed(2)}M</p>
+          </div>
+          <div className="col-span-2">
+            <p className="text-gray-600">Lead Status</p>
+            <p className="font-semibold text-gray-900 capitalize">{round_details.lead_status.replace('_', ' ')}</p>
+          </div>
+          {round_details.other_investors && round_details.other_investors.length > 0 && (
+            <div className="col-span-2">
+              <p className="text-gray-600">Other Investors</p>
+              <p className="text-sm text-gray-700">{round_details.other_investors.join(', ')}</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Traction Snapshot */}
+      {traction_snapshot ? (
+        <div className="card bg-green-50">
+          <h3 className="text-lg font-semibold text-gray-900 mb-3">Traction</h3>
+          <div className="space-y-2 text-sm">
+            {traction_snapshot.revenue_arr_mrr && (
+              <div>
+                <span className="text-gray-600">Revenue:</span>{' '}
+                <span className="font-semibold text-gray-900">{traction_snapshot.revenue_arr_mrr}</span>
+              </div>
+            )}
+            {traction_snapshot.growth_rate && (
+              <div>
+                <span className="text-gray-600">Growth:</span>{' '}
+                <span className="font-semibold text-gray-900">{traction_snapshot.growth_rate}</span>
+              </div>
+            )}
+            {Object.entries(traction_snapshot.key_metrics).map(([key, value]) => (
+              <div key={key}>
+                <span className="text-gray-600 capitalize">{key.replace(/_/g, ' ')}:</span>{' '}
+                <span className="font-semibold text-gray-900">{value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="card bg-gray-100">
+          <p className="text-sm text-gray-600 italic">No traction metrics available yet (pre-product/pre-revenue)</p>
+        </div>
+      )}
+
+      {/* Tension */}
+      <div className="card border-l-4 border-orange-500">
+        <h3 className="text-lg font-semibold text-gray-900 mb-3">Key Tension</h3>
+        <p className="text-gray-700 mb-3">{tension.description}</p>
+        <div>
+          <p className="text-sm font-medium text-gray-700 mb-2">Key Risks:</p>
+          <ul className="space-y-1">
+            {tension.key_risks.map((risk, idx) => (
+              <li key={idx} className="text-sm text-gray-600 flex items-start">
+                <span className="text-orange-600 mr-2">⚠</span>
+                <span>{risk}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Info Gaps */}
+      <div className="card bg-red-50">
+        <h3 className="text-lg font-semibold text-gray-900 mb-3">Missing Information</h3>
+        <ul className="space-y-2">
+          {info_gaps.map((gap, idx) => (
+            <li key={idx} className="text-sm">
+              <span className="font-medium text-gray-900">{gap.category}:</span>{' '}
+              <span className="text-gray-700">{gap.description}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Question */}
+      <div className="card bg-primary-50 border-2 border-primary-200">
+        <h3 className="text-lg font-semibold text-primary-900 mb-3">The Question</h3>
+        <p className="text-primary-800 font-medium">{question_to_investor}</p>
+      </div>
+    </div>
+  );
+}
