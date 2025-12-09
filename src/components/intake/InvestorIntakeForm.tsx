@@ -72,7 +72,7 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
       {/* Preferred Sectors */}
       <div>
         <label className="label">
-          Preferred Sectors <span className="text-red-500">*</span>
+          Preferred Sectors <span className="text-semantic-error font-bold">*</span>
         </label>
         <p className="text-sm text-gray-600 mb-3">
           Which sectors do you prefer to invest in?
@@ -90,9 +90,9 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
                     setPreferredSectors(preferredSectors.filter((s) => s !== sector));
                   }
                 }}
-                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
               />
-              <span className="text-sm text-gray-700 capitalize">{sector}</span>
+              <span className="text-sm text-black capitalize">{sector}</span>
             </label>
           ))}
         </div>
@@ -118,9 +118,9 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
                     setAvoidedSectors(avoidedSectors.filter((s) => s !== sector));
                   }
                 }}
-                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
               />
-              <span className="text-sm text-gray-700 capitalize">{sector}</span>
+              <span className="text-sm text-black capitalize">{sector}</span>
             </label>
           ))}
         </div>
@@ -129,7 +129,7 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
       {/* Stage Focus */}
       <div>
         <label className="label">
-          Stage Focus <span className="text-red-500">*</span>
+          Stage Focus <span className="text-semantic-error font-bold">*</span>
         </label>
         <p className="text-sm text-gray-600 mb-3">
           Which stages do you invest in?
@@ -141,7 +141,7 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
       {/* Geography Focus */}
       <div>
         <label className="label">
-          Geography Focus <span className="text-red-500">*</span>
+          Geography Focus <span className="text-semantic-error font-bold">*</span>
         </label>
         <p className="text-sm text-gray-600 mb-3">
           Which geographies do you invest in?
@@ -162,9 +162,9 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
                     setGeographyFocus(geographyFocus.filter((g) => g !== geo));
                   }
                 }}
-                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
               />
-              <span className="text-sm text-gray-700">{geo}</span>
+              <span className="text-sm text-black">{geo}</span>
             </label>
           ))}
         </div>
@@ -176,7 +176,7 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
       {/* Evaluation Weightages */}
       <div>
         <label className="label">
-          Evaluation Weightages <span className="text-red-500">*</span>
+          Evaluation Weightages <span className="text-semantic-error font-bold">*</span>
         </label>
         <p className="text-sm text-gray-600 mb-3">
           How do you weight different factors in your decisions? (must sum to 100%)

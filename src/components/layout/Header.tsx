@@ -8,12 +8,12 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <h1 className="text-xl font-bold text-primary-600">VC Deal Judgment</h1>
+            <h1 className="text-xl font-bold text-primary-500">VC Deal Judgment</h1>
           </div>
 
           {gameState.game_id && !gameState.is_completed && (
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-600 font-medium">
                 Scenario {gameState.current_index + 1} of {gameState.max_scenarios}
               </span>
             </div>

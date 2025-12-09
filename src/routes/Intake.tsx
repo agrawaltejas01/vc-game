@@ -47,7 +47,7 @@ export function Intake() {
     <div className="min-h-[calc(100vh-4rem)] py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-3">
+          <h2 className="text-3xl font-bold text-black mb-3">
             Investor Profile
           </h2>
           <p className="text-gray-600">
@@ -56,8 +56,8 @@ export function Intake() {
         </div>
 
         {submitError && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-800 text-sm">{submitError}</p>
+          <div className="mb-6 p-4 bg-semantic-errorLight border-2 border-semantic-error rounded-lg">
+            <p className="text-semantic-error text-sm font-semibold">{submitError}</p>
           </div>
         )}
 

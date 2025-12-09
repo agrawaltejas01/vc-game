@@ -31,11 +31,11 @@ export function ScenarioView({ scenario, onSubmit, isSubmitting, error }: Scenar
       <ScenarioDetails scenario={scenario} />
 
       <div className="border-t border-gray-200 pt-8">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Decision</h3>
+        <h3 className="text-lg font-bold text-black mb-4">Your Decision</h3>
 
         {error && (
-          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-800 text-sm">{error}</p>
+          <div className="mb-4 p-4 bg-semantic-errorLight border-2 border-semantic-error rounded-lg">
+            <p className="text-semantic-error text-sm font-semibold">{error}</p>
           </div>
         )}
 
@@ -46,11 +46,11 @@ export function ScenarioView({ scenario, onSubmit, isSubmitting, error }: Scenar
             onClick={() => setDecision('pass')}
             disabled={isSubmitting}
             className={`
-              py-6 px-4 rounded-lg border-2 font-semibold text-lg transition-all
+              py-6 px-4 rounded-lg border-3 font-bold text-lg transition-all
               ${
                 decision === 'pass'
-                  ? 'bg-red-100 border-red-500 text-red-700 shadow-md'
-                  : 'bg-white border-gray-300 text-gray-700 hover:border-red-400 hover:bg-red-50'
+                  ? 'bg-semantic-errorLight border-semantic-error text-semantic-error shadow-lg'
+                  : 'bg-white border-gray-300 text-black hover:border-semantic-error hover:bg-semantic-errorLight'
               }
               ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
             `}
@@ -64,11 +64,11 @@ export function ScenarioView({ scenario, onSubmit, isSubmitting, error }: Scenar
             onClick={() => setDecision('invest')}
             disabled={isSubmitting}
             className={`
-              py-6 px-4 rounded-lg border-2 font-semibold text-lg transition-all
+              py-6 px-4 rounded-lg border-3 font-bold text-lg transition-all
               ${
                 decision === 'invest'
-                  ? 'bg-green-100 border-green-500 text-green-700 shadow-md'
-                  : 'bg-white border-gray-300 text-gray-700 hover:border-green-400 hover:bg-green-50'
+                  ? 'bg-semantic-successLight border-semantic-success text-semantic-success shadow-lg'
+                  : 'bg-white border-gray-300 text-black hover:border-semantic-success hover:bg-semantic-successLight'
               }
               ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
             `}
@@ -81,7 +81,7 @@ export function ScenarioView({ scenario, onSubmit, isSubmitting, error }: Scenar
         {/* Audio Recording (Optional) */}
         {decision && (
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-black mb-2">
               Record your reasoning (optional)
             </label>
             <AudioRecorder
