@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useGameContext } from '../context/GameContext';
-import { submitAndGetNext } from '../api/endpoints';
-import { ScenarioView } from '../components/game/ScenarioView';
-import { InvestorVector } from '../components/game/InvestorVector';
-import { LoadingSpinner } from '../components/game/LoadingSpinner';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useGameContext } from "../context/GameContext";
+import { submitAndGetNext } from "../api/endpoints";
+import { ScenarioView } from "../components/game/ScenarioView";
+import { InvestorVector } from "../components/game/InvestorVector";
+import { LoadingSpinner } from "../components/game/LoadingSpinner";
 
 export function Game() {
   const navigate = useNavigate();
@@ -23,18 +23,23 @@ export function Game() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'scenario' | 'profile'>('scenario');
+  const [activeTab, setActiveTab] = useState<"scenario" | "profile">(
+    "scenario"
+  );
 
   // Redirect if no gameId or scenario (should come from Intake)
   useEffect(() => {
     if (!gameId || !currentScenario) {
-      navigate('/intake');
+      navigate("/intake");
     }
   }, [gameId, currentScenario, navigate]);
 
-  const handleSubmitResponse = async (_decision: 'pass' | 'invest', audioBlob?: Blob) => {
+  const handleSubmitResponse = async (
+    _decision: "pass" | "invest",
+    audioBlob?: Blob
+  ) => {
     if (!gameId || !audioBlob) {
-      setSubmissionError('Audio recording required');
+      setSubmissionError("Audio recording required");
       return;
     }
 
@@ -45,14 +50,17 @@ export function Game() {
     try {
       const response = await submitAndGetNext({
         gameId,
-        currentQuestionIndex: gameState.current_index ,  // Starts at 1 for first submission
+        currentQuestionIndex: gameState.current_index, // Starts at 1 for first submission
         audioBlob,
       });
 
-      if (response.gameCompleted) {
+      if (
+        response.gameCompleted ||
+        gameState.current_index + 1 >= gameState.max_scenarios
+      ) {
         // Game complete
         completeGame();
-        navigate('/summary');
+        navigate("/summary");
       } else if (response.scenario) {
         // Move to next scenario
         setCurrentScenario(response.scenario);
@@ -63,7 +71,7 @@ export function Game() {
       }
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : 'Failed to submit response';
+        error instanceof Error ? error.message : "Failed to submit response";
       setSubmissionError(errorMessage);
       setError(errorMessage);
     } finally {
@@ -86,26 +94,26 @@ export function Game() {
       <div className="lg:hidden border-b border-gray-200 bg-white">
         <div className="flex">
           <button
-            onClick={() => setActiveTab('scenario')}
+            onClick={() => setActiveTab("scenario")}
             className={`
               flex-1 py-3 px-4 text-sm font-medium border-b-2 transition-colors
               ${
-                activeTab === 'scenario'
-                  ? 'border-blue-500 text-blue-600 bg-blue-50'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                activeTab === "scenario"
+                  ? "border-blue-500 text-blue-600 bg-blue-50"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
               }
             `}
           >
             Scenario
           </button>
           <button
-            onClick={() => setActiveTab('profile')}
+            onClick={() => setActiveTab("profile")}
             className={`
               flex-1 py-3 px-4 text-sm font-medium border-b-2 transition-colors
               ${
-                activeTab === 'profile'
-                  ? 'border-blue-500 text-blue-600 bg-blue-50'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                activeTab === "profile"
+                  ? "border-blue-500 text-blue-600 bg-blue-50"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
               }
             `}
           >
@@ -122,7 +130,7 @@ export function Game() {
           <div
             className={`
               lg:w-3/5 h-full overflow-y-auto
-              ${activeTab === 'scenario' ? 'block' : 'hidden lg:block'}
+              ${activeTab === "scenario" ? "block" : "hidden lg:block"}
             `}
           >
             <ScenarioView
@@ -137,7 +145,7 @@ export function Game() {
           <div
             className={`
               lg:w-2/5 h-full border-t lg:border-t-0 lg:border-l border-gray-200 bg-white overflow-y-auto
-              ${activeTab === 'profile' ? 'block' : 'hidden lg:block'}
+              ${activeTab === "profile" ? "block" : "hidden lg:block"}
             `}
           >
             <InvestorVector vector={investorVector} />

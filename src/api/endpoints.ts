@@ -297,14 +297,18 @@ export async function getGameSummary(gameId: string): Promise<GetSummaryResponse
 
     const summary = generateGameSummary(profile);
 
+    // Match backend response structure
     return {
+      success: true,
       summary,
+      message: 'Game summary generated successfully',
     };
   }
 
-  // Real API call
-  const response = await apiClient.get<GetSummaryResponse>(
-    `/api/game/summary?game_id=${gameId}`
+  // Real API call - POST request with JSON body
+  const response = await apiClient.post<GetSummaryResponse>(
+    '/api/game/summary',
+    { gameId }
   );
 
   if (!response.success || !response.data) {

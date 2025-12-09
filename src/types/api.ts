@@ -69,9 +69,11 @@ export interface NextQuestionResponse {
 
 // Summary API
 export interface GetSummaryRequest {
-  game_id: string;
+  gameId: string;
 }
 
 export interface GetSummaryResponse {
+  success: boolean;
   summary: GameSummary;
+  message: string;
 }
