@@ -11,7 +11,7 @@ export function Header() {
             <h1 className="text-xl font-bold text-primary-600">VC Deal Judgment</h1>
           </div>
 
-          {gameState.investor_id && !gameState.is_completed && (
+          {gameState.game_id && !gameState.is_completed && (
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600">
                 Scenario {gameState.current_index + 1} of {gameState.max_scenarios}

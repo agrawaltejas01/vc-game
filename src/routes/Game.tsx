@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameContext } from '../context/GameContext';
-import { getNextScenario, submitScenarioResponse } from '../api/endpoints';
+import { submitAndGetNext } from '../api/endpoints';
 import { ScenarioView } from '../components/game/ScenarioView';
 import { InvestorVector } from '../components/game/InvestorVector';
 import { LoadingSpinner } from '../components/game/LoadingSpinner';
@@ -9,7 +9,7 @@ import { LoadingSpinner } from '../components/game/LoadingSpinner';
 export function Game() {
   const navigate = useNavigate();
   const {
-    investorId,
+    gameId,
     gameState,
     currentScenario,
     investorVector,
@@ -21,42 +21,20 @@ export function Game() {
     setError,
   } = useGameContext();
 
-  const [isLoadingScenario, setIsLoadingScenario] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'scenario' | 'profile'>('scenario');
 
-  // Load first scenario on mount or when scenario index changes
+  // Redirect if no gameId or scenario (should come from Intake)
   useEffect(() => {
-    if (!investorId) {
+    if (!gameId || !currentScenario) {
       navigate('/intake');
-      return;
     }
+  }, [gameId, currentScenario, navigate]);
 
-    const loadScenario = async () => {
-      setIsLoadingScenario(true);
-      setError(null);
-
-      try {
-        const response = await getNextScenario(gameState);
-        setCurrentScenario(response.scenario);
-        setInvestorVector(response.investor_vector);
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : 'Failed to load scenario';
-        setError(errorMessage);
-      } finally {
-        setIsLoadingScenario(false);
-      }
-    };
-
-    if (!currentScenario || currentScenario.scenario_index !== gameState.current_index) {
-      loadScenario();
-    }
-  }, [gameState.current_index, investorId]);
-
-  const handleSubmitResponse = async (decision: 'pass' | 'invest', audioBlob?: Blob) => {
-    if (!investorId || !currentScenario) {
+  const handleSubmitResponse = async (_decision: 'pass' | 'invest', audioBlob?: Blob) => {
+    if (!gameId || !audioBlob) {
+      setSubmissionError('Audio recording required');
       return;
     }
 
@@ -65,22 +43,23 @@ export function Game() {
     setLoading(true);
 
     try {
-      const response = await submitScenarioResponse({
-        investor_id: investorId,
-        scenario_id: currentScenario.scenario_id,
-        decision: decision,
-        audio_response: audioBlob,
+      const response = await submitAndGetNext({
+        gameId,
+        currentQuestionIndex: gameState.current_index ,  // Starts at 1 for first submission
+        audioBlob,
       });
 
-      setInvestorVector(response.updated_vector);
-
-      if (response.has_more) {
-        // Move to next scenario
-        incrementScenarioIndex();
-      } else {
+      if (response.gameCompleted) {
         // Game complete
         completeGame();
         navigate('/summary');
+      } else if (response.scenario) {
+        // Move to next scenario
+        setCurrentScenario(response.scenario);
+        if (response.scenario.investor_vector) {
+          setInvestorVector(response.scenario.investor_vector);
+        }
+        incrementScenarioIndex();
       }
     } catch (error) {
       const errorMessage =
@@ -93,10 +72,10 @@ export function Game() {
     }
   };
 
-  if (isLoadingScenario || !currentScenario) {
+  if (!currentScenario) {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <LoadingSpinner size="lg" text="Loading scenario..." />
+        <LoadingSpinner size="lg" text="Loading..." />
       </div>
     );
   }

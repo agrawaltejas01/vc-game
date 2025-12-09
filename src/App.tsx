@@ -8,9 +8,9 @@ import { Summary } from './routes/Summary';
 
 // Protected route wrapper
 function ProtectedRoute({ children, requireCompleted = false }: { children: React.ReactNode; requireCompleted?: boolean }) {
-  const { investorId, gameState } = useGameContext();
+  const { gameId, gameState } = useGameContext();
 
-  if (!investorId) {
+  if (!gameId) {
     return <Navigate to="/intake" replace />;
   }
 

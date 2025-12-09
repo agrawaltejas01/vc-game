@@ -8,12 +8,12 @@ import { LoadingSpinner } from '../components/game/LoadingSpinner';
 
 export function Summary() {
   const navigate = useNavigate();
-  const { investorId, investorProfile, gameSummary, setGameSummary, resetGame } = useGameContext();
+  const { gameId, investorProfile, gameSummary, setGameSummary, resetGame } = useGameContext();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!investorId) {
+    if (!gameId) {
       navigate('/intake');
       return;
     }
@@ -27,7 +27,7 @@ export function Summary() {
       setError(null);
 
       try {
-        const response = await getGameSummary(investorId);
+        const response = await getGameSummary(gameId);
         setGameSummary(response.summary);
       } catch (error) {
         const errorMessage =
@@ -39,7 +39,7 @@ export function Summary() {
     };
 
     loadSummary();
-  }, [investorId]);
+  }, [gameId, gameSummary, setGameSummary, navigate]);
 
   const handlePlayAgain = () => {
     resetGame();

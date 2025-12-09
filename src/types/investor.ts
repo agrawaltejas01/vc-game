@@ -25,9 +25,9 @@ export interface EvaluationWeights {
 }
 
 export interface InvestorProfile {
+  preferred_sectors: string[];
+  avoided_sectors: string[];
   stage_focus: Stage[];
   geography_focus: Geography[];
-  cheque_size_min_usd: number;
-  cheque_size_max_usd: number;
   evaluation_weights: EvaluationWeights;
 }

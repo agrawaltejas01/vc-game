@@ -101,8 +101,8 @@ Fetch the next scenario for the investor. Backend controls which scenario to sho
     },
     "round_details": {
       "round_type": "Pre-seed",
-      "total_size": 1000000,
-      "ask_amount": 150000,
+      "total_round_size_usd": 1000000,
+      "investor_ask_usd": 150000,
       "lead_status": "no_lead_yet"
     },
     "traction_snapshot": null,
@@ -353,9 +353,9 @@ interface FounderProfile {
 
 interface RoundDetails {
   round_type: string;
-  total_size: number;  // in dollars
+  total_round_size_usd: number;  // in dollars
   valuation?: number;  // in dollars
-  ask_amount: number;  // in dollars
+  investor_ask_usd: number;  // in dollars
   lead_status: 'leading' | 'following' | 'no_lead_yet';
   other_investors?: string[];
 }

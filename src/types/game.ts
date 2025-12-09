@@ -1,7 +1,7 @@
 // Game state and response types
 
 export interface GameState {
-  investor_id?: string;
+  game_id?: string;
   current_index: number;
   max_scenarios: number;
   is_completed: boolean;

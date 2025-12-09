@@ -8,7 +8,7 @@ import { LoadingSpinner } from '../components/game/LoadingSpinner';
 
 export function Intake() {
   const navigate = useNavigate();
-  const { setInvestorProfile, setLoading, setError } = useGameContext();
+  const { setInvestorProfile, setCurrentScenario, setLoading, setError } = useGameContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -19,7 +19,9 @@ export function Intake() {
 
     try {
       const response = await createInvestorProfile(profile);
-      setInvestorProfile(profile, response.investor_id);
+      // Response includes: { gameId, scenario, currentQuestionIndex }
+      setInvestorProfile(profile, response.gameId);
+      setCurrentScenario(response.scenario);  // Set first scenario
       setError(null);
       navigate('/game');
     } catch (error) {

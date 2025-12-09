@@ -22,8 +22,11 @@ export interface CreateProfileRequest {
 }
 
 export interface CreateProfileResponse {
-  investor_id: string;
-  profile: InvestorProfile;
+  success: boolean;
+  gameId: string;
+  scenario: Scenario;
+  currentQuestionIndex: number;
+  message: string;
 }
 
 // Scenario API
@@ -49,9 +52,24 @@ export interface SubmitResponseResponse {
   next_scenario_id?: string;
 }
 
+// Next Question API (combines submission + get next)
+export interface NextQuestionRequest {
+  gameId: string;
+  currentQuestionIndex: number;
+  audioBlob: Blob;
+}
+
+export interface NextQuestionResponse {
+  success: boolean;
+  scenario?: Scenario;
+  currentQuestionIndex: number;
+  gameCompleted?: boolean;
+  message?: string;
+}
+
 // Summary API
 export interface GetSummaryRequest {
-  investor_id: string;
+  game_id: string;
 }
 
 export interface GetSummaryResponse {

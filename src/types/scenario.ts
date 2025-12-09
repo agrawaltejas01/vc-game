@@ -15,9 +15,9 @@ export interface FounderProfile {
 
 export interface RoundDetails {
   round_type: string;
-  total_size: number;
+  total_round_size_usd: number;
   valuation?: number;
-  ask_amount: number;
+  investor_ask_usd: number;
   lead_status: 'leading' | 'following' | 'no_lead_yet';
   other_investors?: string[];
 }
@@ -32,11 +32,6 @@ export interface TractionSnapshot {
 export interface Tension {
   description: string;
   key_risks: string[];
-}
-
-export interface InfoGap {
-  category: string;
-  description: string;
 }
 
 export interface InvestorVector {
@@ -63,7 +58,7 @@ export interface Scenario {
   round_details: RoundDetails;
   traction_snapshot: TractionSnapshot | null;
   tension: Tension;
-  info_gaps: InfoGap[];
+  info_gaps: string[];
   question_to_investor: string;
   has_twist: boolean;
   investor_vector?: InvestorVector;

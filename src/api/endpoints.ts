@@ -3,6 +3,7 @@ import { InvestorProfile } from '../types/investor';
 import { GameState } from '../types/game';
 import {
   CreateProfileResponse,
+  NextQuestionResponse,
   GetNextScenarioResponse,
   SubmitResponseResponse,
   GetSummaryResponse,
@@ -30,7 +31,7 @@ let mockStorage: {
 const generateId = () => `inv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
 /**
- * Create or update investor profile
+ * Create investor profile and start game
  */
 export async function createInvestorProfile(
   profile: InvestorProfile
@@ -39,21 +40,28 @@ export async function createInvestorProfile(
     // Mock implementation
     await delay(800);
 
-    const investorId = generateId();
-    mockStorage.profiles.set(investorId, profile);
-    console.log("Inside set mock profile")
-    console.log(profile)
-    mockStorage.currentScenarioIndex.set(investorId, 0);
-    mockStorage.responses.set(investorId, []);
+    const gameId = generateId();
+    mockStorage.profiles.set(gameId, profile);
+    mockStorage.currentScenarioIndex.set(gameId, 0);
+    mockStorage.responses.set(gameId, []);
+
+    const initialScenario = mockScenarios[0];
+    const investorVector = generateInvestorVector(0, profile);
 
     return {
-      investor_id: investorId,
-      profile,
+      success: true,
+      gameId,
+      scenario: {
+        ...initialScenario,
+        investor_vector: investorVector,
+      },
+      currentQuestionIndex: 0,
+      message: 'Game session created successfully',
     };
   }
 
   // Real API call
-  const response = await apiClient.post<CreateProfileResponse>('/investor-profile', {
+  const response = await apiClient.post<CreateProfileResponse>('/api/game/basic-details', {
     profile,
   });
 
@@ -75,14 +83,14 @@ export async function getNextScenario(
     // Mock implementation
     await delay(1000);
 
-    const investorId = gameState.investor_id;
-    if (!investorId) {
-      throw new Error('Investor ID is required');
+    const gameId = gameState.game_id;
+    if (!gameId) {
+      throw new Error('Game ID is required');
     }
 
-    console.log(investorId)
+    console.log(gameId)
 
-    const profile = mockStorage.profiles.get(investorId);
+    const profile = mockStorage.profiles.get(gameId);
     if (!profile) {
       throw new Error('Investor profile not found');
     }
@@ -115,8 +123,8 @@ export async function getNextScenario(
   }
 
   // Real API call
-  const response = await apiClient.post<GetNextScenarioResponse>('/game/next-scenario', {
-    investor_id: gameState.investor_id,
+  const response = await apiClient.post<GetNextScenarioResponse>('/api/game/next-scenario', {
+    game_id: gameState.game_id,
     current_index: gameState.current_index,
   });
 
@@ -195,7 +203,7 @@ export async function submitScenarioResponse(payload: {
     });
   }
 
-  const response = await fetch(`${apiClient['baseUrl']}/game/next`, {
+  const response = await fetch(`${apiClient['baseUrl']}/api/game/next`, {
     method: 'POST',
     headers,
     body,
@@ -210,16 +218,81 @@ export async function submitScenarioResponse(payload: {
 }
 
 /**
+ * Submit answer and get next question (combined API call)
+ */
+export async function submitAndGetNext(payload: {
+  gameId: string;
+  currentQuestionIndex: number;
+  audioBlob: Blob;
+}): Promise<NextQuestionResponse> {
+  if (apiClient.isUsingMock()) {
+    await delay(1200);
+
+    const profile = mockStorage.profiles.get(payload.gameId);
+    if (!profile) {
+      throw new Error('Game session not found');
+    }
+
+    // Update scenario index
+    const currentIndex = mockStorage.currentScenarioIndex.get(payload.gameId) || 0;
+    const nextIndex = currentIndex + 1;
+    mockStorage.currentScenarioIndex.set(payload.gameId, nextIndex);
+
+    // Check if game completed (6 total scenarios)
+    if (nextIndex >= mockScenarios.length) {
+      return {
+        success: true,
+        currentQuestionIndex: nextIndex,
+        gameCompleted: true,
+        message: 'Game completed',
+      };
+    }
+
+    // Return next scenario
+    const nextScenario = mockScenarios[nextIndex];
+    const investorVector = generateInvestorVector(nextIndex, profile);
+
+    return {
+      success: true,
+      scenario: {
+        ...nextScenario,
+        investor_vector: investorVector,
+      },
+      currentQuestionIndex: nextIndex,
+      gameCompleted: false,
+    };
+  }
+
+  // Real API call using FormData
+  const formData = new FormData();
+  formData.append('gameId', payload.gameId);
+  formData.append('currentQuestionIndex', payload.currentQuestionIndex.toString());
+  formData.append('audio', payload.audioBlob, 'response.webm');
+
+  const baseUrl = apiClient['baseUrl'] || 'http://13.200.21.218:3000';
+  const response = await fetch(`${baseUrl}/api/game/next-question`, {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to submit answer and get next question');
+  }
+
+  return response.json();
+}
+
+/**
  * Get game summary
  */
-export async function getGameSummary(investorId: string): Promise<GetSummaryResponse> {
+export async function getGameSummary(gameId: string): Promise<GetSummaryResponse> {
   if (apiClient.isUsingMock()) {
     // Mock implementation
     await delay(1500);
 
-    const profile = mockStorage.profiles.get(investorId);
+    const profile = mockStorage.profiles.get(gameId);
     if (!profile) {
-      throw new Error('Investor profile not found');
+      throw new Error('Game session not found');
     }
 
     const summary = generateGameSummary(profile);
@@ -231,7 +304,7 @@ export async function getGameSummary(investorId: string): Promise<GetSummaryResp
 
   // Real API call
   const response = await apiClient.get<GetSummaryResponse>(
-    `/game/summary?investor_id=${investorId}`
+    `/api/game/summary?game_id=${gameId}`
   );
 
   if (!response.success || !response.data) {

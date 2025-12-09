@@ -7,7 +7,7 @@ import { GameState, GameSummary } from '../types/game';
 interface GameContextType {
   // State
   investorProfile: InvestorProfile | null;
-  investorId: string | null;
+  gameId: string | null;
   gameState: GameState;
   currentScenario: Scenario | null;
   investorVector: InvestorVector | null;
@@ -35,7 +35,7 @@ interface GameProviderProps {
 
 export function GameProvider({ children }: GameProviderProps) {
   const [investorProfile, setInvestorProfileState] = useState<InvestorProfile | null>(null);
-  const [investorId, setInvestorId] = useState<string | null>(null);
+  const [gameId, setGameId] = useState<string | null>(null);
   const [gameState, setGameState] = useState<GameState>({
     current_index: 0,
     max_scenarios: 6,
@@ -49,8 +49,8 @@ export function GameProvider({ children }: GameProviderProps) {
 
   const setInvestorProfile = useCallback((profile: InvestorProfile, id: string) => {
     setInvestorProfileState(profile);
-    setInvestorId(id);
-    setGameState(prev => ({ ...prev, investor_id: id }));
+    setGameId(id);
+    setGameState(prev => ({ ...prev, game_id: id }));
   }, []);
 
   const setCurrentScenario = useCallback((scenario: Scenario) => {
@@ -84,7 +84,7 @@ export function GameProvider({ children }: GameProviderProps) {
 
   const resetGame = useCallback(() => {
     setInvestorProfileState(null);
-    setInvestorId(null);
+    setGameId(null);
     setGameState({
       current_index: 0,
       max_scenarios: 6,
@@ -106,7 +106,7 @@ export function GameProvider({ children }: GameProviderProps) {
 
   const value: GameContextType = {
     investorProfile,
-    investorId,
+    gameId,
     gameState,
     currentScenario,
     investorVector,

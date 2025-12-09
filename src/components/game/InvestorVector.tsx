@@ -38,12 +38,12 @@ export function InvestorVector({ vector }: InvestorVectorProps) {
           <div>
             <div className="flex justify-between text-xs mb-1">
               <span className="text-gray-600">Founders</span>
-              <span className="font-semibold text-gray-900">{quantitative_metrics.founders}%</span>
+              <span className="font-semibold text-gray-900">{quantitative_metrics.founders * 100}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
                 className="bg-primary-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${quantitative_metrics.founders}%` }}
+                style={{ width: `${quantitative_metrics.founders * 100}%` }}
               />
             </div>
           </div>
@@ -51,12 +51,12 @@ export function InvestorVector({ vector }: InvestorVectorProps) {
           <div>
             <div className="flex justify-between text-xs mb-1">
               <span className="text-gray-600">Sector / Market</span>
-              <span className="font-semibold text-gray-900">{quantitative_metrics.sector_market}%</span>
+              <span className="font-semibold text-gray-900">{quantitative_metrics.sector_market*100}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
                 className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${quantitative_metrics.sector_market}%` }}
+                style={{ width: `${quantitative_metrics.sector_market*100}%` }}
               />
             </div>
           </div>
@@ -64,12 +64,12 @@ export function InvestorVector({ vector }: InvestorVectorProps) {
           <div>
             <div className="flex justify-between text-xs mb-1">
               <span className="text-gray-600">Traction</span>
-              <span className="font-semibold text-gray-900">{quantitative_metrics.traction}%</span>
+              <span className="font-semibold text-gray-900">{quantitative_metrics.traction*100}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
                 className="bg-green-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${quantitative_metrics.traction}%` }}
+                style={{ width: `${quantitative_metrics.traction*100}%` }}
               />
             </div>
           </div>
@@ -77,12 +77,12 @@ export function InvestorVector({ vector }: InvestorVectorProps) {
           <div>
             <div className="flex justify-between text-xs mb-1">
               <span className="text-gray-600">Product / Tech</span>
-              <span className="font-semibold text-gray-900">{quantitative_metrics.product_tech}%</span>
+              <span className="font-semibold text-gray-900">{quantitative_metrics.product_tech*100}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
                 className="bg-purple-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${quantitative_metrics.product_tech}%` }}
+                style={{ width: `${quantitative_metrics.product_tech*100}%` }}
               />
             </div>
           </div>
@@ -90,12 +90,12 @@ export function InvestorVector({ vector }: InvestorVectorProps) {
           <div>
             <div className="flex justify-between text-xs mb-1">
               <span className="text-gray-600">Round Dynamics</span>
-              <span className="font-semibold text-gray-900">{quantitative_metrics.round_dynamics}%</span>
+              <span className="font-semibold text-gray-900">{quantitative_metrics.round_dynamics*100}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
                 className="bg-orange-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${quantitative_metrics.round_dynamics}%` }}
+                style={{ width: `${quantitative_metrics.round_dynamics*100}%` }}
               />
             </div>
           </div>

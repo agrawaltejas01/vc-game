@@ -9,7 +9,8 @@ const stageLabels: Record<Stage, string> = {
   [Stage.PRE_SEED]: 'Pre-seed',
   [Stage.SEED]: 'Seed',
   [Stage.SERIES_A]: 'Series A',
-  [Stage.SERIES_B_PLUS]: 'Series B+',
+  [Stage.SERIES_B]: 'Series B',
+  [Stage.LATE_STAGE]: 'Late Stage',
 };
 
 export function StageSelect({ selected, onChange }: StageSelectProps) {

@@ -46,14 +46,16 @@ export function ScenarioDetails({ scenario }: ScenarioDetailsProps) {
       <div className="card bg-gray-50">
         <h3 className="text-lg font-semibold text-gray-900 mb-3">Founders & Team</h3>
         <p className="text-gray-700 mb-3">{founder_profile.summary}</p>
-        <ul className="space-y-2">
-          {founder_profile.team_bullets.map((bullet, idx) => (
-            <li key={idx} className="text-sm text-gray-700 flex items-start">
-              <span className="text-primary-600 mr-2">•</span>
-              <span>{bullet}</span>
-            </li>
-          ))}
-        </ul>
+        {founder_profile.team_bullets && founder_profile.team_bullets.length > 0 && (
+          <ul className="space-y-2">
+            {founder_profile.team_bullets.map((bullet, idx) => (
+              <li key={idx} className="text-sm text-gray-700 flex items-start">
+                <span className="text-primary-600 mr-2">•</span>
+                <span>{bullet}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {/* Round Details */}
@@ -66,7 +68,7 @@ export function ScenarioDetails({ scenario }: ScenarioDetailsProps) {
           </div>
           <div>
             <p className="text-gray-600">Total Round</p>
-            <p className="font-semibold text-gray-900">${(round_details.total_size / 1000000).toFixed(1)}M</p>
+            <p className="font-semibold text-gray-900">${(round_details.total_round_size_usd / 1000000).toFixed(1)}M</p>
           </div>
           {round_details.valuation && (
             <div>
@@ -76,12 +78,12 @@ export function ScenarioDetails({ scenario }: ScenarioDetailsProps) {
           )}
           <div>
             <p className="text-gray-600">Ask Amount</p>
-            <p className="font-semibold text-gray-900">${(round_details.ask_amount / 1000000).toFixed(2)}M</p>
+            <p className="font-semibold text-gray-900">${(round_details.investor_ask_usd / 1000000).toFixed(2)}M</p>
           </div>
-          <div className="col-span-2">
+          {/* <div className="col-span-2">
             <p className="text-gray-600">Lead Status</p>
-            <p className="font-semibold text-gray-900 capitalize">{round_details.lead_status.replace('_', ' ')}</p>
-          </div>
+            <p className="font-semibold text-gray-900 capitalize">{'leading'}</p>
+          </div> */}
           {round_details.other_investors && round_details.other_investors.length > 0 && (
             <div className="col-span-2">
               <p className="text-gray-600">Other Investors</p>
@@ -108,9 +110,9 @@ export function ScenarioDetails({ scenario }: ScenarioDetailsProps) {
                 <span className="font-semibold text-gray-900">{traction_snapshot.growth_rate}</span>
               </div>
             )}
-            {Object.entries(traction_snapshot.key_metrics).map(([key, value]) => (
+            {traction_snapshot.key_metrics && Object.entries(traction_snapshot.key_metrics).map(([key, value]) => (
               <div key={key}>
-                <span className="text-gray-600 capitalize">{key.replace(/_/g, ' ')}:</span>{' '}
+                {/* <span className="text-gray-600 capitalize">{key.replace(/_/g, ' ')}:</span>{' '} */}
                 <span className="font-semibold text-gray-900">{value}</span>
               </div>
             ))}
@@ -126,31 +128,34 @@ export function ScenarioDetails({ scenario }: ScenarioDetailsProps) {
       <div className="card border-l-4 border-orange-500">
         <h3 className="text-lg font-semibold text-gray-900 mb-3">Key Tension</h3>
         <p className="text-gray-700 mb-3">{tension.description}</p>
-        <div>
-          <p className="text-sm font-medium text-gray-700 mb-2">Key Risks:</p>
-          <ul className="space-y-1">
-            {tension.key_risks.map((risk, idx) => (
-              <li key={idx} className="text-sm text-gray-600 flex items-start">
-                <span className="text-orange-600 mr-2">⚠</span>
-                <span>{risk}</span>
+        {tension.key_risks && tension.key_risks.length > 0 && (
+          <div>
+            <p className="text-sm font-medium text-gray-700 mb-2">Key Risks:</p>
+            <ul className="space-y-1">
+              {tension.key_risks.map((risk, idx) => (
+                <li key={idx} className="text-sm text-gray-600 flex items-start">
+                  <span className="text-orange-600 mr-2">⚠</span>
+                  <span>{risk}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      {/* Info Gaps */}
+      {info_gaps && info_gaps.length > 0 && (
+        <div className="card bg-red-50">
+          <h3 className="text-lg font-semibold text-gray-900 mb-3">Missing Information</h3>
+          <ul className="space-y-2">
+            {info_gaps.map((gap, idx) => (
+              <li key={idx} className="text-sm">
+                <span className="text-gray-700">{gap}</span>
               </li>
             ))}
           </ul>
         </div>
-      </div>
-
-      {/* Info Gaps */}
-      <div className="card bg-red-50">
-        <h3 className="text-lg font-semibold text-gray-900 mb-3">Missing Information</h3>
-        <ul className="space-y-2">
-          {info_gaps.map((gap, idx) => (
-            <li key={idx} className="text-sm">
-              <span className="font-medium text-gray-900">{gap.category}:</span>{' '}
-              <span className="text-gray-700">{gap.description}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      )}
 
       {/* Question */}
       <div className="card bg-primary-50 border-2 border-primary-200">
