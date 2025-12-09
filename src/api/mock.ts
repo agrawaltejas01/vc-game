@@ -45,14 +45,8 @@ export const mockScenarios: Scenario[] = [
       ],
     },
     info_gaps: [
-      {
-        category: 'Go-to-Market',
-        description: 'Customer acquisition strategy unclear - no sales pipeline or early adopters identified',
-      },
-      {
-        category: 'Product-Market Fit',
-        description: 'Limited customer validation - unclear if target segment has budget authority',
-      },
+     'Limited customer validation - unclear if target segment has budget authority',
+     'Limited customer validation - unclear if target segment has budget authority'
     ],
     question_to_investor: 'Given the strong technical team but weak GTM capabilities and no early customer traction, would you invest at this stage?',
     has_twist: false,
@@ -104,14 +98,7 @@ export const mockScenarios: Scenario[] = [
       ],
     },
     info_gaps: [
-      {
-        category: 'Unit Economics',
-        description: 'Burn rate and path to profitability unclear',
-      },
-      {
-        category: 'Market Risk',
-        description: 'Unclear if current customers will scale usage or if this is just early adopter interest',
-      },
+      'Limited customer validation - unclear if target segment has budget authority'
     ],
     question_to_investor: 'The metrics are strong and Sequoia is leading, but the $25M valuation seems aggressive. Do you follow at this price, or pass?',
     has_twist: true,
@@ -165,18 +152,7 @@ export const mockScenarios: Scenario[] = [
       ],
     },
     info_gaps: [
-      {
-        category: 'Regulatory',
-        description: 'Impact of new banking regulations unclear - potential for $2-3M compliance spend',
-      },
-      {
-        category: 'Customer Concentration',
-        description: 'Top 3 customer revenue percentage not disclosed',
-      },
-      {
-        category: 'Churn',
-        description: 'Customer churn rate and reasons for churnnot provided',
-      },
+     'Limited customer validation - unclear if target segment has budget authority'
     ],
     question_to_investor: 'Strong fundamentals, but regulatory headwinds are building. How do you weigh the execution track record against regulatory risk?',
     has_twist: false,
@@ -219,18 +195,7 @@ export const mockScenarios: Scenario[] = [
       ],
     },
     info_gaps: [
-      {
-        category: 'Technology Validation',
-        description: 'Independent validation of performance claims not yet completed',
-      },
-      {
-        category: 'Manufacturing',
-        description: 'Path from lab to production scale unclear - no manufacturing partners identified',
-      },
-      {
-        category: 'Market Timing',
-        description: 'Will grid storage market still be attractive in 7 years when product ready?',
-      },
+     'Limited customer validation - unclear if target segment has budget authority'
     ],
     question_to_investor: 'Exceptional scientific team with potentially game-changing technology, but 7+ year timeline and massive capital needs. Is this within your mandate?',
     has_twist: false,
@@ -284,14 +249,7 @@ export const mockScenarios: Scenario[] = [
       ],
     },
     info_gaps: [
-      {
-        category: 'Retention',
-        description: 'Creator and brand retention metrics beyond 6 months not provided',
-      },
-      {
-        category: 'Unit Economics',
-        description: 'Customer acquisition cost (CAC) and burn rate unclear',
-      },
+      'Limited customer validation - unclear if target segment has budget authority'
     ],
     question_to_investor: 'Strong growth trajectory and the lead is pushing hard for a quick close. Do you have enough信息 to decide, or do you need more time despite the competitive pressure?',
     has_twist: true,
@@ -346,14 +304,7 @@ export const mockScenarios: Scenario[] = [
       ],
     },
     info_gaps: [
-      {
-        category: 'Economics',
-        description: 'CAC payback period and LTV:CAC ratio not disclosed',
-      },
-      {
-        category: 'Future Funding',
-        description: 'Total capital required to profitability and Series B plans unclear',
-      },
+     'Limited customer validation - unclear if target segment has budget authority'
     ],
     question_to_investor: 'Perfect team and solid execution, but this will require massive follow-on funding ($40M+). Can you support this through profitability, or will future funding risk be an issue?',
     has_twist: false,
