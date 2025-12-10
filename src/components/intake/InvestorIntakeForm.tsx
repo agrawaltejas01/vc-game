@@ -3,6 +3,7 @@ import { InvestorProfile, Stage, Geography, EvaluationWeights } from '../../type
 import { validateWeightagesSum, getWeightagesSum } from '../../utils/validation';
 import { StageSelect } from './StageSelect';
 import { WeightageSliders } from './WeightageSliders';
+import { ChipSelector } from './ChipSelector';
 
 interface InvestorIntakeFormProps {
   onSubmit: (profile: InvestorProfile) => void;
@@ -67,63 +68,48 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
     onSubmit(profile);
   };
 
+  // Mutual exclusion logic - filter sectors based on opposite list selection
+  const availablePreferredSectors = COMMON_SECTORS.filter(
+    sector => !avoidedSectors.includes(sector)
+  );
+
+  const availableAvoidedSectors = COMMON_SECTORS.filter(
+    sector => !preferredSectors.includes(sector)
+  );
+
   return (
     <form onSubmit={handleSubmit} className="space-y-8 card">
       {/* Preferred Sectors */}
       <div>
-        <label className="label">
-          Preferred Sectors <span className="text-semantic-error font-bold">*</span>
-        </label>
         <p className="text-sm text-gray-600 mb-3">
           Which sectors do you prefer to invest in?
         </p>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {COMMON_SECTORS.map((sector) => (
-            <label key={sector} className="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={preferredSectors.includes(sector)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setPreferredSectors([...preferredSectors, sector]);
-                  } else {
-                    setPreferredSectors(preferredSectors.filter((s) => s !== sector));
-                  }
-                }}
-                className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
-              />
-              <span className="text-sm text-black capitalize">{sector}</span>
-            </label>
-          ))}
-        </div>
-        {errors.preferredSectors && <p className="error-text">{errors.preferredSectors}</p>}
+        <ChipSelector
+          label="Preferred Sectors"
+          required={true}
+          options={availablePreferredSectors}
+          selected={preferredSectors}
+          onChange={setPreferredSectors}
+          allowCustom={true}
+          customPlaceholder="Enter sector name"
+        />
+        {errors.preferredSectors && <p className="error-text mt-2">{errors.preferredSectors}</p>}
       </div>
 
       {/* Avoided Sectors */}
       <div>
-        <label className="label">Avoided Sectors (Optional)</label>
         <p className="text-sm text-gray-600 mb-3">
           Which sectors do you avoid investing in?
         </p>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {COMMON_SECTORS.map((sector) => (
-            <label key={sector} className="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={avoidedSectors.includes(sector)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setAvoidedSectors([...avoidedSectors, sector]);
-                  } else {
-                    setAvoidedSectors(avoidedSectors.filter((s) => s !== sector));
-                  }
-                }}
-                className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
-              />
-              <span className="text-sm text-black capitalize">{sector}</span>
-            </label>
-          ))}
-        </div>
+        <ChipSelector
+          label="Avoided Sectors (Optional)"
+          required={false}
+          options={availableAvoidedSectors}
+          selected={avoidedSectors}
+          onChange={setAvoidedSectors}
+          allowCustom={true}
+          customPlaceholder="Enter sector name"
+        />
       </div>
 
       {/* Stage Focus */}
@@ -140,36 +126,19 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
 
       {/* Geography Focus */}
       <div>
-        <label className="label">
-          Geography Focus <span className="text-semantic-error font-bold">*</span>
-        </label>
         <p className="text-sm text-gray-600 mb-3">
           Which geographies do you invest in?
         </p>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {Object.values(Geography).map((geo) => (
-            <label
-              key={geo}
-              className="flex items-center space-x-2 cursor-pointer"
-            >
-              <input
-                type="checkbox"
-                checked={geographyFocus.includes(geo)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setGeographyFocus([...geographyFocus, geo]);
-                  } else {
-                    setGeographyFocus(geographyFocus.filter((g) => g !== geo));
-                  }
-                }}
-                className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
-              />
-              <span className="text-sm text-black">{geo}</span>
-            </label>
-          ))}
-        </div>
+        <ChipSelector
+          label="Geography Focus"
+          required={true}
+          options={Object.values(Geography)}
+          selected={geographyFocus}
+          onChange={setGeographyFocus}
+          allowCustom={false}
+        />
         {errors.geographyFocus && (
-          <p className="error-text">{errors.geographyFocus}</p>
+          <p className="error-text mt-2">{errors.geographyFocus}</p>
         )}
       </div>
 

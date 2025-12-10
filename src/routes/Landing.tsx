@@ -1,7 +1,14 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { scrollToTop } from '../utils/scrollToTop';
 
 export function Landing() {
   const navigate = useNavigate();
+
+  // Scroll to top on mount
+  useEffect(() => {
+    scrollToTop();
+  }, []);
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">

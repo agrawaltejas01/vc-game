@@ -70,6 +70,12 @@ export function ScenarioDetails({ scenario }: ScenarioDetailsProps) {
             <p className="text-gray-600 text-xs font-semibold uppercase tracking-wide">Total Round</p>
             <p className="font-bold text-black">${(round_details.total_round_size_usd / 1000000).toFixed(1)}M</p>
           </div>
+          {round_details.valuation_pre_money_usd && (
+            <div>
+              <p className="text-gray-600 text-xs font-semibold uppercase tracking-wide">Pre-Money Valuation</p>
+              <p className="font-bold text-black">${(round_details.valuation_pre_money_usd / 1000000).toFixed(1)}M</p>
+            </div>
+          )}
           {round_details.valuation && (
             <div>
               <p className="text-gray-600 text-xs font-semibold uppercase tracking-wide">Valuation</p>

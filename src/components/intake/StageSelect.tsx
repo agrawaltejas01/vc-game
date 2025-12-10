@@ -23,29 +23,24 @@ export function StageSelect({ selected, onChange }: StageSelectProps) {
   };
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div className="flex flex-wrap gap-2">
       {Object.values(Stage).map((stage) => (
-        <label
+        <button
           key={stage}
+          type="button"
+          onClick={() => toggleStage(stage)}
           className={`
-            flex items-center justify-center p-4 rounded-lg border-2 cursor-pointer transition-all
+            inline-flex items-center px-4 py-2 rounded-full border-2 font-medium cursor-pointer transition-all
             ${
               selected.includes(stage)
-                ? 'border-primary-500 bg-primary-50'
-                : 'border-gray-200 hover:border-gray-300'
+                ? 'border-primary-500 bg-primary-50 text-primary-900 font-semibold'
+                : 'border-gray-300 bg-white text-black hover:border-black'
             }
+            focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2
           `}
         >
-          <input
-            type="checkbox"
-            checked={selected.includes(stage)}
-            onChange={() => toggleStage(stage)}
-            className="sr-only"
-          />
-          <span className="text-sm font-medium text-gray-700">
-            {stageLabels[stage]}
-          </span>
-        </label>
+          {stageLabels[stage]}
+        </button>
       ))}
     </div>
   );

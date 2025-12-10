@@ -1,16 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameContext } from '../context/GameContext';
 import { createInvestorProfile } from '../api/endpoints';
 import { InvestorProfile } from '../types/investor';
 import { InvestorIntakeForm } from '../components/intake/InvestorIntakeForm';
-import { LoadingSpinner } from '../components/game/LoadingSpinner';
+import { LoadingOverlay } from '../components/common/LoadingOverlay';
+import { scrollToTop } from '../utils/scrollToTop';
 
 export function Intake() {
   const navigate = useNavigate();
   const { setInvestorProfile, setCurrentScenario, setLoading, setError } = useGameContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // Scroll to top on mount
+  useEffect(() => {
+    scrollToTop();
+  }, []);
 
   const handleSubmit = async (profile: InvestorProfile) => {
     setIsSubmitting(true);
@@ -35,16 +41,9 @@ export function Intake() {
     }
   };
 
-  if (isSubmitting) {
-    return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <LoadingSpinner size="lg" text="Setting up your game..." />
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-[calc(100vh-4rem)] py-12 px-4">
+      <LoadingOverlay show={isSubmitting} />
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-black mb-3">

@@ -17,6 +17,7 @@ export interface RoundDetails {
   round_type: string;
   total_round_size_usd: number;
   valuation?: number;
+  valuation_pre_money_usd?: number;
   investor_ask_usd: number;
   lead_status: 'leading' | 'following' | 'no_lead_yet';
   other_investors?: string[];

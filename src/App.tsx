@@ -1,10 +1,12 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { GameProvider, useGameContext } from './context/GameContext';
 import { AppLayout } from './components/layout/AppLayout';
 import { Landing } from './routes/Landing';
 import { Intake } from './routes/Intake';
 import { Game } from './routes/Game';
 import { Summary } from './routes/Summary';
+import { trackPageView } from './utils/analytics';
 
 // Protected route wrapper
 function ProtectedRoute({ children, requireCompleted = false }: { children: React.ReactNode; requireCompleted?: boolean }) {
@@ -22,6 +24,13 @@ function ProtectedRoute({ children, requireCompleted = false }: { children: Reac
 }
 
 function AppRoutes() {
+  const location = useLocation();
+
+  // Track page views on route change
+  useEffect(() => {
+    trackPageView(location.pathname + location.search);
+  }, [location]);
+
   return (
     <AppLayout>
       <Routes>

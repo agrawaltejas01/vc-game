@@ -4,7 +4,8 @@ import { useGameContext } from '../context/GameContext';
 import { getGameSummary } from '../api/endpoints';
 import { ArchetypeCard } from '../components/summary/ArchetypeCard';
 import { DecisionPatterns } from '../components/summary/DecisionPatterns';
-import { LoadingSpinner } from '../components/game/LoadingSpinner';
+import { LoadingOverlay } from '../components/common/LoadingOverlay';
+import { scrollToTop } from '../utils/scrollToTop';
 
 export function Summary() {
   const navigate = useNavigate();
@@ -12,17 +13,30 @@ export function Summary() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Scroll to top on mount
+  useEffect(() => {
+    scrollToTop();
+  }, []);
+
+  // Scroll to top when summary loads
+  useEffect(() => {
+    if (gameSummary) {
+      scrollToTop();
+    }
+  }, [gameSummary]);
+
   useEffect(() => {
     if (!gameId) {
       navigate('/intake');
       return;
     }
 
-    const loadSummary = async () => {
-      if (gameSummary) {
-        return; // Already loaded
-      }
+    // Only fetch if we don't already have the summary
+    if (gameSummary) {
+      return;
+    }
 
+    const loadSummary = async () => {
       setIsLoading(true);
       setError(null);
 
@@ -39,7 +53,8 @@ export function Summary() {
     };
 
     loadSummary();
-  }, [gameId, gameSummary, setGameSummary, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameId]);
 
   const handlePlayAgain = () => {
     resetGame();
@@ -47,11 +62,7 @@ export function Summary() {
   };
 
   if (isLoading || !gameSummary) {
-    return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <LoadingSpinner size="lg" text="Analyzing your decisions..." />
-      </div>
-    );
+    return <LoadingOverlay show={true} />;
   }
 
   if (error) {

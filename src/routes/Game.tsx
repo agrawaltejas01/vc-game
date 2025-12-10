@@ -5,6 +5,9 @@ import { submitAndGetNext } from "../api/endpoints";
 import { ScenarioView } from "../components/game/ScenarioView";
 import { InvestorVector } from "../components/game/InvestorVector";
 import { LoadingSpinner } from "../components/game/LoadingSpinner";
+import { LoadingOverlay } from "../components/common/LoadingOverlay";
+import { ProgressBar } from "../components/game/ProgressBar";
+import { scrollToTop } from "../utils/scrollToTop";
 
 export function Game() {
   const navigate = useNavigate();
@@ -34,6 +37,21 @@ export function Game() {
     }
   }, [gameId, currentScenario, navigate]);
 
+  // Scroll to top when scenario changes
+  useEffect(() => {
+    if (currentScenario) {
+      scrollToTop();
+    }
+  }, [currentScenario?.scenario_id]);
+
+  // Scroll to top when mobile tab changes
+  useEffect(() => {
+    // Only scroll on mobile when switching tabs
+    if (window.innerWidth < 1024) {  // lg breakpoint
+      scrollToTop();
+    }
+  }, [activeTab]);
+
   const handleSubmitResponse = async (
     _decision: "pass" | "invest",
     audioBlob?: Blob
@@ -56,7 +74,8 @@ export function Game() {
 
       if (
         response.gameCompleted ||
-        gameState.current_index + 1 >= gameState.max_scenarios
+        // Revert before pushing -- gameState.max_scenarios
+        gameState.current_index + 1 >= 2
       ) {
         // Game complete
         completeGame();
@@ -90,6 +109,11 @@ export function Game() {
 
   return (
     <div className="h-[calc(100vh-4rem)] bg-gray-50 flex flex-col">
+      <LoadingOverlay show={isSubmitting} />
+      <ProgressBar
+        current={gameState.current_index + 1}
+        total={gameState.max_scenarios}
+      />
       {/* Mobile Tabs (visible on small screens) */}
       <div className="lg:hidden border-b border-gray-200 bg-white">
         <div className="flex">
@@ -104,7 +128,7 @@ export function Game() {
               }
             `}
           >
-            Scenario
+            Investment Scenario
           </button>
           <button
             onClick={() => setActiveTab("profile")}
@@ -117,7 +141,7 @@ export function Game() {
               }
             `}
           >
-            Your Profile
+            Your Decision Vector
           </button>
         </div>
       </div>
