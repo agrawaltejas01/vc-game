@@ -13,7 +13,7 @@ export function ScenarioDetails({ scenario }: ScenarioDetailsProps) {
       <div className="flex flex-wrap gap-2">
         <span className="badge-primary">{scenario.stage}</span>
         <span className="badge-secondary">{scenario.sector}</span>
-        
+
       </div>
 
       {/* Business Overview */}
@@ -140,7 +140,7 @@ export function ScenarioDetails({ scenario }: ScenarioDetailsProps) {
 
       {/* Tension */}
       <div className="card-accent-gold">
-        <h3 className="text-lg font-bold text-black mb-3">Key Tension</h3>
+        <h3 className="text-lg font-bold text-black mb-3">IC's Concern</h3>
         <p className="text-gray-700 mb-3">{tension.description}</p>
         {tension.key_risks && tension.key_risks.length > 0 && (
           <div>

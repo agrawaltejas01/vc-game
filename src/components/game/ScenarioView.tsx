@@ -6,13 +6,13 @@ import { isFeatureEnabled } from '../../config/engagementFeatures';
 
 interface ScenarioViewProps {
   scenario: Scenario;
-  onSubmit: (decision: 'pass' | 'invest', textResponse?: string, audioBlob?: Blob) => void;
+  onSubmit: (decision: 'not_investing' | 'investing', textResponse?: string, audioBlob?: Blob) => void;
   isSubmitting: boolean;
   error: string | null;
 }
 
 export function ScenarioView({ scenario, onSubmit, isSubmitting, error }: ScenarioViewProps) {
-  const [decision, setDecision] = useState<'pass' | 'invest' | null>(null);
+  const [decision, setDecision] = useState<'not_investing' | 'investing' | null>(null);
   const [textResponse, setTextResponse] = useState('');
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [skipRationale, setSkipRationale] = useState(false);
@@ -121,12 +121,12 @@ export function ScenarioView({ scenario, onSubmit, isSubmitting, error }: Scenar
         <div className="grid grid-cols-2 gap-4 mb-6">
           <button
             type="button"
-            onClick={() => setDecision('pass')}
+            onClick={() => setDecision('not_investing')}
             disabled={isSubmitting}
             className={`
               py-6 px-4 rounded-lg border-3 font-bold text-lg transition-all
               ${
-                decision === 'pass'
+                decision === 'not_investing'
                   ? 'bg-semantic-errorLight border-semantic-error text-semantic-error shadow-lg'
                   : 'bg-white border-gray-300 text-black hover:border-semantic-error hover:bg-semantic-errorLight'
               }
@@ -139,12 +139,12 @@ export function ScenarioView({ scenario, onSubmit, isSubmitting, error }: Scenar
 
           <button
             type="button"
-            onClick={() => setDecision('invest')}
+            onClick={() => setDecision('investing')}
             disabled={isSubmitting}
             className={`
               py-6 px-4 rounded-lg border-3 font-bold text-lg transition-all
               ${
-                decision === 'invest'
+                decision === 'investing'
                   ? 'bg-semantic-successLight border-semantic-success text-semantic-success shadow-lg'
                   : 'bg-white border-gray-300 text-black hover:border-semantic-success hover:bg-semantic-successLight'
               }

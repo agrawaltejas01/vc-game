@@ -98,7 +98,7 @@ export function Game() {
   }, []);
 
   const handleSubmitResponse = async (
-    _decision: "pass" | "invest",
+    investment_decision: "not_investing" | "investing",
     textResponse?: string,
     audioBlob?: Blob
   ) => {
@@ -118,6 +118,7 @@ export function Game() {
       const response = await submitAndGetNext({
         gameId,
         currentQuestionIndex: gameState.current_index, // Starts at 1 for first submission
+        investment_decision,
         textResponse,
         audioBlob,
       });

@@ -56,7 +56,7 @@ export function InvestorVector({ vector }: InvestorVectorProps) {
           Your Preference Profile
         </h3>
         <p className="text-xs text-gray-500">
-          Live analysis based on your responses
+          Live analysis based on your responses. Your honest take and a descriptive answer helps map better!
         </p>
       </div>
 

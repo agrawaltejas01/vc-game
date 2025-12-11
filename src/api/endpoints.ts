@@ -223,6 +223,7 @@ export async function submitScenarioResponse(payload: {
 export async function submitAndGetNext(payload: {
   gameId: string;
   currentQuestionIndex: number;
+  investment_decision: 'not_investing' | 'investing';
   textResponse?: string;
   audioBlob?: Blob;
 }): Promise<NextQuestionResponse> {
@@ -236,6 +237,7 @@ export async function submitAndGetNext(payload: {
 
     // Log submission type
     console.log('Mock submission:', {
+      investment_decision: payload.investment_decision,
       hasText: !!payload.textResponse,
       hasAudio: !!payload.audioBlob,
       textLength: payload.textResponse?.length || 0,
@@ -275,6 +277,7 @@ export async function submitAndGetNext(payload: {
   const formData = new FormData();
   formData.append('gameId', payload.gameId);
   formData.append('currentQuestionIndex', payload.currentQuestionIndex.toString());
+  formData.append('investment_decision', payload.investment_decision);
 
   // Conditionally add text response
   if (payload.textResponse) {

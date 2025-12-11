@@ -62,11 +62,12 @@ export function Intake() {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-black mb-3">
-            Your Criteria
+            Investment Criteria
           </h2>
           <p className="text-gray-600">
-            Set your core investment preferences. The scenarios will be generated w/ AI reasoning models accordingly.
+            Set your core investment preferences. AI will craft scenarios based on your inputs.
           </p>
+
         </div>
 
         {submitError && (

@@ -169,7 +169,7 @@ export function Summary() {
               Stated vs. Revealed Preferences
             </h3>
             <p className="text-sm text-gray-600 mb-4">
-              How your actual decisions compared to your initial stated preferences
+              Your actual decisions compared to your initial stated preferences
             </p>
             <div className="space-y-4">
               {gameSummary.comparison_to_initial.map((comparison, idx) => (
@@ -179,31 +179,31 @@ export function Summary() {
                       <p className="text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Stated</p>
                       <p className="text-sm text-black">{comparison.stated_preference}</p>
                     </div>
-                    <div>
-                      <p className="text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Revealed</p>
+                    <div className="flex flex-col">
+                      <div className="flex items-center justify-between mb-1">
+                        <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Revealed</p>
+                        <span
+                          className={`px-2 py-1 text-xs rounded-full border-2 ${
+                            comparison.alignment === 'aligned'
+                              ? 'bg-semantic-successLight text-gray'
+                              : comparison.alignment === 'partially_aligned'
+                              ? 'bg-accent-gold-light text-gray'
+                              : 'bg-semantic-errorLight text-gray'
+                          } ${
+                            isFeatureEnabled('showAlignmentBadgeAnimations')
+                              ? comparison.alignment === 'aligned'
+                                ? 'animate-scale-bounce'
+                                : comparison.alignment === 'misaligned'
+                                ? 'animate-shake'
+                                : ''
+                              : ''
+                          }`}
+                        >
+                          {comparison.alignment.replace('_', ' ')}
+                        </span>
+                      </div>
                       <p className="text-sm text-black">{comparison.revealed_preference}</p>
                     </div>
-                  </div>
-                  <div className="mt-2">
-                    <span
-                      className={`inline-block px-2 py-1 text-xs font-bold rounded-full border-2 ${
-                        comparison.alignment === 'aligned'
-                          ? 'bg-semantic-successLight text-semantic-success border-semantic-success'
-                          : comparison.alignment === 'partially_aligned'
-                          ? 'bg-accent-gold-light text-accent-gold border-accent-gold'
-                          : 'bg-semantic-errorLight text-semantic-error border-semantic-error'
-                      } ${
-                        isFeatureEnabled('showAlignmentBadgeAnimations')
-                          ? comparison.alignment === 'aligned'
-                            ? 'animate-scale-bounce'
-                            : comparison.alignment === 'misaligned'
-                            ? 'animate-shake'
-                            : ''
-                          : ''
-                      }`}
-                    >
-                      {comparison.alignment.replace('_', ' ')}
-                    </span>
                   </div>
                   <p className="text-sm text-gray-700 mt-2 italic">{comparison.insights}</p>
                 </div>
@@ -216,12 +216,12 @@ export function Summary() {
         {showSections.breakdown && (
           <div className="card animate-slide-up">
             <h3 className="text-xl font-bold text-black mb-4">
-              Your Revealed Evaluation Weights
+              Revealed Evaluation Weights
             </h3>
             <div className="space-y-4">
               <div>
                 <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-700 font-medium">Founders / Team</span>
+                  <span className="text-gray-700 font-medium">Founders/ Team</span>
                   <span className="font-bold text-black">
                     {gameSummary.evaluation_breakdown.founders}%
                   </span>
@@ -236,7 +236,7 @@ export function Summary() {
 
               <div>
                 <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-700 font-medium">Sector / Market</span>
+                  <span className="text-gray-700 font-medium">Sector/ Market</span>
                   <span className="font-bold text-black">
                     {gameSummary.evaluation_breakdown.sector_market}%
                   </span>
@@ -251,7 +251,7 @@ export function Summary() {
 
               <div>
                 <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-700 font-medium">Traction</span>
+                  <span className="text-gray-700 font-medium">Traction/ Metrics</span>
                   <span className="font-bold text-black">
                     {gameSummary.evaluation_breakdown.traction}%
                   </span>
@@ -266,7 +266,7 @@ export function Summary() {
 
               <div>
                 <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-700 font-medium">Product / Technology</span>
+                  <span className="text-gray-700 font-medium">Product/ Technology</span>
                   <span className="font-bold text-black">
                     {gameSummary.evaluation_breakdown.product_tech}%
                   </span>
@@ -281,7 +281,7 @@ export function Summary() {
 
               <div>
                 <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-700 font-medium">Round Dynamics</span>
+                  <span className="text-gray-700 font-medium">Round Dynamics (valuation, lead, etc.)</span>
                   <span className="font-bold text-black">
                     {gameSummary.evaluation_breakdown.round_dynamics}%
                   </span>
@@ -302,9 +302,6 @@ export function Summary() {
           <div className="flex justify-center space-x-4 pt-4 animate-fade-in">
             <button onClick={handlePlayAgain} className="btn-primary px-8">
               Play Again
-            </button>
-            <button disabled className="btn-disabled">
-              Share Results (Coming Soon)
             </button>
           </div>
         )}
