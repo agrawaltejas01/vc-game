@@ -210,6 +210,7 @@ export const mockScenarios: Scenario[] = [
     stage: 'Seed',
     sector: 'Consumer Internet Infrastructure',
     business: {
+      company_name: 'Project Rocketship 3',
       one_liner: 'Creator economy platform enabling micro-influencers to monetize through branded content',
       description: 'CreatorHub connects micro-influencers (10K-100K followers) with brands for authentic sponsored content. The platform uses AI to match creators with relevant brands and handles contracts, payments, and performance tracking. Strong viral growth through creator referrals.',
       business_model: '20% take rate on all transactions. Creators earn $500-5K per campaign; brands pay $600-6K.',
@@ -264,6 +265,7 @@ export const mockScenarios: Scenario[] = [
     stage: 'Series A',
     sector: 'Climate Tech',
     business: {
+      company_name: 'Project Rocketship 3',
       one_liner: 'Carbon accounting SaaS for mid-market companies to measure and reduce their carbon footprint',
       description: 'CarbonIQ automates carbon footprint measurement for mid-market companies (500-5000 employees) by integrating with their existing systems (ERP, procurement, travel). The platform provides actionable recommendations for emissions reduction and prepares companies for upcoming regulatory requirements.',
       business_model: 'Annual subscription: $25K-100K based on company size and complexity. Average deal: $45K.',

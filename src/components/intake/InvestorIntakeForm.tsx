@@ -21,10 +21,10 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
   const [geographyFocus, setGeographyFocus] = useState<string[]>(['India']);
   const [evaluationWeights, setEvaluationWeights] = useState<EvaluationWeights>({
     founders: 30,
-    sector_market: 25,
-    traction: 20,
-    product_tech: 15,
-    round_dynamics: 10,
+    sector_market: 15,
+    traction: 15,
+    product_tech: 20,
+    round_dynamics: 20,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});

@@ -14,9 +14,13 @@ export function Landing() {
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
       <div className="max-w-2xl w-full text-center space-y-8">
         <div className="space-y-4">
-          <h1 className="text-5xl font-bold text-black">
-            DealWars
-          </h1>
+          <div className="flex justify-center mb-6">
+            <img
+              src="/assets/dealwars-logo.png"
+              alt="DealWars Logo"
+              className="w-auto h-32 md:h-40 object-contain"
+            />
+          </div>
           <div className="space-y-2">
             <p className="text-xl text-gray-700 max-w-xl mx-auto">
               Only conviction survives~
@@ -35,7 +39,7 @@ export function Landing() {
               <li className="flex items-start">
                 <span className="text-primary-500 mr-3 text-xl font-bold">✓</span>
                 <span className="text-gray-700">
-                  Arm your core criteria
+                  Calibrate your core criteria
                 </span>
               </li>
               <li className="flex items-start">
