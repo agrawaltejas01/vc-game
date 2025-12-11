@@ -12,12 +12,14 @@ import { trackPageView } from './utils/analytics';
 function ProtectedRoute({ children, requireCompleted = false }: { children: React.ReactNode; requireCompleted?: boolean }) {
   const { gameId, gameState } = useGameContext();
 
+  // Redirect to homepage if user doesn't have required game state
+  // (e.g., when refreshing on protected pages)
   if (!gameId) {
-    return <Navigate to="/intake" replace />;
+    return <Navigate to="/" replace />;
   }
 
   if (requireCompleted && !gameState.is_completed) {
-    return <Navigate to="/game" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;
@@ -52,6 +54,8 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+        {/* Catch all 404 routes and redirect to homepage */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AppLayout>
   );

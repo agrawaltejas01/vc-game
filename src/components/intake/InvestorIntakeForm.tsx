@@ -20,9 +20,9 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
   const [chequeSizeMax, setChequeSizeMax] = useState<string>('');
   const [geographyFocus, setGeographyFocus] = useState<string[]>(['India']);
   const [evaluationWeights, setEvaluationWeights] = useState<EvaluationWeights>({
-    founders: 30,
-    sector_market: 15,
-    traction: 15,
+    founders: 20,
+    sector_market: 20,
+    traction: 20,
     product_tech: 20,
     round_dynamics: 20,
   });
