@@ -22,6 +22,7 @@ export interface RoundDetails {
   investor_ask_usd: number;
   lead_status: 'leading' | 'following' | 'no_lead_yet';
   other_investors?: string[];
+  round_dynamics_notes?: string;
 }
 
 export interface TractionSnapshot {
