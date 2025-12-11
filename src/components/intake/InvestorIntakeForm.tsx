@@ -9,13 +9,15 @@ interface InvestorIntakeFormProps {
   onSubmit: (profile: InvestorProfile) => void;
 }
 
-const COMMON_SECTORS = ['fintech', 'ai', 'healthtech', 'consumer', 'saas', 'enterprise', 'deeptech', 'edtech', 'defence', 'gambling'];
+const COMMON_SECTORS = ['SaaS','AI','Fintech','Enterprise Software', 'Consumer', 'DevTools','HealthTech','DeepTech'];
 const DEFAULT_GEOGRAPHIES = ['India'];
 
 export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
   const [preferredSectors, setPreferredSectors] = useState<string[]>([]);
   const [avoidedSectors, setAvoidedSectors] = useState<string[]>([]);
   const [stageFocus, setStageFocus] = useState<Stage[]>([]);
+  const [chequeSizeMin, setChequeSizeMin] = useState<string>('');
+  const [chequeSizeMax, setChequeSizeMax] = useState<string>('');
   const [geographyFocus, setGeographyFocus] = useState<string[]>(['India']);
   const [evaluationWeights, setEvaluationWeights] = useState<EvaluationWeights>({
     founders: 30,
@@ -36,6 +38,10 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
 
     if (stageFocus.length === 0) {
       newErrors.stageFocus = 'Please select at least one stage';
+    }
+
+    if (!chequeSizeMin.trim() || !chequeSizeMax.trim()) {
+      newErrors.chequeSize = 'Please provide both minimum and maximum cheque sizes';
     }
 
     if (geographyFocus.length === 0) {
@@ -62,6 +68,8 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
       preferred_sectors: preferredSectors,
       avoided_sectors: avoidedSectors,
       stage_focus: stageFocus,
+      cheque_size_min: chequeSizeMin,
+      cheque_size_max: chequeSizeMax,
       geography_focus: geographyFocus,
       evaluation_weights: evaluationWeights,
     };
@@ -82,9 +90,7 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
     <form onSubmit={handleSubmit} className="space-y-8 card">
       {/* Preferred Sectors */}
       <div>
-        <p className="text-sm text-gray-600 mb-3">
-          Which sectors do you prefer to invest in?
-        </p>
+       
         <ChipSelector
           label="Preferred Sectors"
           required={true}
@@ -99,11 +105,8 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
 
       {/* Avoided Sectors */}
       <div>
-        <p className="text-sm text-gray-600 mb-3">
-          Which sectors do you avoid investing in?
-        </p>
         <ChipSelector
-          label="Avoided Sectors (Optional)"
+          label="Avoided Sectors"
           required={false}
           options={availableAvoidedSectors}
           selected={avoidedSectors}
@@ -118,18 +121,41 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
         <label className="label">
           Stage Focus <span className="text-semantic-error font-bold">*</span>
         </label>
-        <p className="text-sm text-gray-600 mb-3">
-          Which stages do you invest in?
-        </p>
+
         <StageSelect selected={stageFocus} onChange={setStageFocus} />
         {errors.stageFocus && <p className="error-text">{errors.stageFocus}</p>}
       </div>
 
+      {/* Cheque Size */}
+      <div>
+        <label className="label">
+          Cheque Size (USD) <span className="text-semantic-error font-bold">*</span>
+        </label>
+        <div className="flex items-center gap-3">
+          <input
+            type="text"
+            value={chequeSizeMin}
+            onChange={(e) => setChequeSizeMin(e.target.value)}
+            placeholder="250K"
+            maxLength={10}
+            className="w-24 px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 outline-none text-center"
+          />
+          <span className="text-gray-600 font-medium">to</span>
+          <input
+            type="text"
+            value={chequeSizeMax}
+            onChange={(e) => setChequeSizeMax(e.target.value)}
+            placeholder="2M"
+            maxLength={10}
+            className="w-24 px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 outline-none text-center"
+          />
+        </div>
+        {errors.chequeSize && <p className="error-text mt-2">{errors.chequeSize}</p>}
+      </div>
+
       {/* Geography Focus */}
       <div>
-        <p className="text-sm text-gray-600 mb-3">
-          Which geographies do you invest in?
-        </p>
+
         <ChipSelector
           label="Geography Focus"
           required={true}
@@ -150,7 +176,7 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
           Evaluation Weightages <span className="text-semantic-error font-bold">*</span>
         </label>
         <p className="text-sm text-gray-600 mb-3">
-          How do you weight different factors in your decisions? (must sum to 100%)
+          How do you weight different factors in your decisions?
         </p>
         <WeightageSliders
           weights={evaluationWeights}

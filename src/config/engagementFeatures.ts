@@ -51,6 +51,9 @@ export interface EngagementFeatures {
 
   // Feature 16: Mobile vector tab notification dot
   showMobileVectorNotificationDot: boolean;
+
+  // Feature 17: Skip rationale option on decision submission
+  allowSkipRationale: boolean;
 }
 
 // Default configuration - ALL ENABLED for initial testing
@@ -71,6 +74,7 @@ export const engagementConfig: EngagementFeatures = {
   showSummaryStaggeredReveal: false,
   showAlignmentBadgeAnimations: false,
   showMobileVectorNotificationDot: true, // Feature 16 - enabled by default
+  allowSkipRationale: false, // Feature 17 - disabled by default (require rationale)
 };
 
 /**

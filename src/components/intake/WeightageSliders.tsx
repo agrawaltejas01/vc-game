@@ -7,10 +7,10 @@ interface WeightageSlidersProps {
 }
 
 const weightLabels: Record<keyof EvaluationWeights, string> = {
-  founders: 'Founders / Team',
-  sector_market: 'Sector / Market',
-  traction: 'Traction / Metrics',
-  product_tech: 'Product / Technology',
+  founders: 'Founders/ Team',
+  sector_market: 'Sector/ Market',
+  traction: 'Traction/ Metrics',
+  product_tech: 'Product/ Technology',
   round_dynamics: 'Round Dynamics (valuation, lead, etc.)',
 };
 

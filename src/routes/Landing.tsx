@@ -15,54 +15,58 @@ export function Landing() {
       <div className="max-w-2xl w-full text-center space-y-8">
         <div className="space-y-4">
           <h1 className="text-5xl font-bold text-black">
-            VC Deal Judgment Game
+            Pitch or Pass
           </h1>
-          <p className="text-xl text-gray-700 max-w-xl mx-auto">
-            Test your investment instincts. Play through 6 realistic startup scenarios and discover your investor archetype.
+          <div className="space-y-2">
+            <p className="text-xl text-gray-700 max-w-xl mx-auto">
+              One deal at a time. No overthinking.
+            </p>
+
+          </div>
+          <p className="text-2xl text-gray-700 max-w-xl mx-auto">
+            Your investment instincts - revealed!
           </p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-md border-2 border-gray-200 p-8 space-y-6">
           <div className="space-y-4 text-left">
-            <h3 className="text-lg font-bold text-black">What to expect:</h3>
+            <h3 className="text-lg font-bold text-black">You will do three things:</h3>
             <ul className="space-y-3">
               <li className="flex items-start">
                 <span className="text-primary-500 mr-3 text-xl font-bold">✓</span>
                 <span className="text-gray-700">
-                  <strong className="text-black">Quick intake:</strong> Share your investment preferences (2 minutes)
+                  Set your core criteria
                 </span>
               </li>
               <li className="flex items-start">
                 <span className="text-primary-500 mr-3 text-xl font-bold">✓</span>
                 <span className="text-gray-700">
-                  <strong className="text-black">Real scenarios:</strong> Evaluate 5-6 realistic deals with tensions and trade-offs
+                  React to a live deal
                 </span>
               </li>
               <li className="flex items-start">
                 <span className="text-primary-500 mr-3 text-xl font-bold">✓</span>
                 <span className="text-gray-700">
-                  <strong className="text-black">Instinctive responses:</strong> Record your gut reactions via text or audio
+                  See your dynamic decision vector
                 </span>
               </li>
-              <li className="flex items-start">
-                <span className="text-primary-500 mr-3 text-xl font-bold">✓</span>
-                <span className="text-gray-700">
-                  <strong className="text-black">Your archetype:</strong> Discover how you really make decisions (15 minutes total)
-                </span>
-              </li>
+              
             </ul>
+            <h3 className="text-lg font-bold text-black">Get your personal pattern of how you actually invest.</h3>
           </div>
 
           <button
             onClick={() => navigate('/intake')}
             className="btn-primary w-full text-lg py-4"
           >
-            Start Game
+            Let's Start
           </button>
         </div>
-
         <p className="text-sm text-gray-500">
-          Built to help VCs understand their decision-making patterns
+          Feels like stepping into a partner meeting, but slightly relaxed.
+        </p>
+        <p className="text-sm text-gray-500">
+          Response to every scenario uncovers how you decide where to invest. Together 5 scenarios reveal what your decisions actually show.
         </p>
       </div>
     </div>

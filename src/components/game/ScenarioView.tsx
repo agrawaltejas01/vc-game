@@ -20,7 +20,12 @@ export function ScenarioView({ scenario, onSubmit, isSubmitting, error }: Scenar
   const [audioActive, setAudioActive] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const canSubmit = decision !== null && (skipRationale || textResponse.trim().length > 0 || audioBlob !== null) && !isSubmitting;
+  const skipEnabled = isFeatureEnabled('allowSkipRationale');
+  const canSubmit = decision !== null &&
+    (skipEnabled
+      ? (skipRationale || textResponse.trim().length > 0 || audioBlob !== null)
+      : (textResponse.trim().length > 0 || audioBlob !== null)
+    ) && !isSubmitting;
 
   // Toggle text input
   const handleTextToggle = () => {
@@ -168,8 +173,8 @@ export function ScenarioView({ scenario, onSubmit, isSubmitting, error }: Scenar
           </div>
         )}
 
-        {/* Skip Checkbox - Only show after decision is made */}
-        {decision && (
+        {/* Skip Checkbox - Only show after decision is made and if feature is enabled */}
+        {decision && skipEnabled && (
           <div className="mt-6 flex items-center space-x-2">
             <input
               type="checkbox"

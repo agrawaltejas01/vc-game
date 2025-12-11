@@ -30,4 +30,6 @@ export interface InvestorProfile {
   stage_focus: Stage[];
   geography_focus: string[];
   evaluation_weights: EvaluationWeights;
+  cheque_size_min: string;
+  cheque_size_max: string;
 }

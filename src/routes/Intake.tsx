@@ -18,6 +18,21 @@ export function Intake() {
     scrollToTop();
   }, []);
 
+  // Warn user before refresh/close
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+      return '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   const handleSubmit = async (profile: InvestorProfile) => {
     setIsSubmitting(true);
     setSubmitError(null);
@@ -47,10 +62,10 @@ export function Intake() {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-black mb-3">
-            Investor Profile
+            Your Criteria
           </h2>
           <p className="text-gray-600">
-            Tell us about your investment preferences. This helps us tailor the scenarios and understand your decision patterns.
+            Set your core investment preferences. The scenarios will be generated accordingly.
           </p>
         </div>
 

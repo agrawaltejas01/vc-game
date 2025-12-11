@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGameContext } from '../context/GameContext';
 import { getGameSummary } from '../api/endpoints';
 import { ArchetypeCard } from '../components/summary/ArchetypeCard';
+import { EmailCaptureCard } from '../components/summary/EmailCaptureCard';
 import { DecisionPatterns } from '../components/summary/DecisionPatterns';
 import { LoadingOverlay } from '../components/common/LoadingOverlay';
 import { scrollToTop } from '../utils/scrollToTop';
@@ -17,6 +18,7 @@ export function Summary() {
   // Staggered reveal state
   const [showSections, setShowSections] = useState({
     archetype: false,
+    emailCapture: false,
     patterns: false,
     comparison: false,
     breakdown: false,
@@ -28,6 +30,21 @@ export function Summary() {
     scrollToTop();
   }, []);
 
+  // Warn user before refresh/close
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+      return '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   // Scroll to top when summary loads and trigger staggered reveal
   useEffect(() => {
     if (gameSummary) {
@@ -37,6 +54,7 @@ export function Summary() {
       if (!isFeatureEnabled('showSummaryStaggeredReveal')) {
         setShowSections({
           archetype: true,
+          emailCapture: true,
           patterns: true,
           comparison: true,
           breakdown: true,
@@ -47,6 +65,7 @@ export function Summary() {
 
       // Staggered reveal sequence
       setTimeout(() => setShowSections(prev => ({ ...prev, archetype: true })), 200);
+      setTimeout(() => setShowSections(prev => ({ ...prev, emailCapture: true })), 450);
       setTimeout(() => setShowSections(prev => ({ ...prev, patterns: true })), 700);
       setTimeout(() => setShowSections(prev => ({ ...prev, comparison: true })), 1000);
       setTimeout(() => setShowSections(prev => ({ ...prev, breakdown: true })), 1300);
@@ -126,6 +145,13 @@ export function Summary() {
               archetypeName={gameSummary.archetype_name}
               description={gameSummary.archetype_description}
             />
+          </div>
+        )}
+
+        {/* Email Capture */}
+        {showSections.emailCapture && (
+          <div className="animate-scale-in">
+            <EmailCaptureCard />
           </div>
         )}
 
