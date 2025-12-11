@@ -54,7 +54,7 @@ export function EmailCaptureCard() {
     <div className="card">
       <div className="text-center space-y-4">
         <p className="text-gray-700 text-lg">
-          Interested in more? Enter your email to see how far this can go.
+          Interested in more? Enter your email to know how far this can go.
         </p>
         <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-3">
           <div>

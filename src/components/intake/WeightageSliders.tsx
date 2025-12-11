@@ -90,8 +90,8 @@ export function WeightageSliders({ weights, onChange }: WeightageSlidersProps) {
           mt-4 p-4 rounded-lg border-2 text-center font-semibold
           ${
             isValid
-              ? 'bg-green-50 border-green-500 text-green-700'
-              : 'bg-yellow-50 border-yellow-500 text-yellow-700'
+              ? 'bg-semantic-successLight border-semantic-success text-semantic-success'
+              : 'bg-semantic-warningLight border-semantic-warning text-semantic-warning'
           }
         `}
       >

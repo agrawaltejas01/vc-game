@@ -86,6 +86,7 @@ Fetch the next scenario for the investor. Backend controls which scenario to sho
     "stage": "Pre-seed",
     "sector": "SaaS",
     "business": {
+      "company_name": "Project Rocketship",
       "one_liner": "AI-powered sales intelligence platform",
       "description": "Full description here...",
       "business_model": "Usage-based SaaS...",

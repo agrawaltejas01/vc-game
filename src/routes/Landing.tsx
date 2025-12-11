@@ -15,58 +15,55 @@ export function Landing() {
       <div className="max-w-2xl w-full text-center space-y-8">
         <div className="space-y-4">
           <h1 className="text-5xl font-bold text-black">
-            Pitch or Pass
+            DealWars
           </h1>
           <div className="space-y-2">
             <p className="text-xl text-gray-700 max-w-xl mx-auto">
-              One deal at a time. No overthinking.
+              Only conviction survives~
             </p>
 
           </div>
           <p className="text-2xl text-gray-700 max-w-xl mx-auto">
-            Your investment instincts - revealed!
+            Every deal is a battle of instincts!
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-md border-2 border-gray-200 p-8 space-y-6">
+        <div className="bg-white rounded-2xl shadow-lg border-2 border-gray-200 p-8 space-y-6">
           <div className="space-y-4 text-left">
-            <h3 className="text-lg font-bold text-black">You will do three things:</h3>
+            <h3 className="text-lg font-bold text-black">Your mission has three steps:</h3>
             <ul className="space-y-3">
               <li className="flex items-start">
                 <span className="text-primary-500 mr-3 text-xl font-bold">✓</span>
                 <span className="text-gray-700">
-                  Set your core criteria
+                  Arm your core criteria
                 </span>
               </li>
               <li className="flex items-start">
                 <span className="text-primary-500 mr-3 text-xl font-bold">✓</span>
                 <span className="text-gray-700">
-                  React to a live deal
+                  Engage with live deal scenarios
                 </span>
               </li>
               <li className="flex items-start">
                 <span className="text-primary-500 mr-3 text-xl font-bold">✓</span>
                 <span className="text-gray-700">
-                  See your dynamic decision vector
+                  Reveal your evolving decision vector
                 </span>
               </li>
               
             </ul>
-            <h3 className="text-lg font-bold text-black">Get your personal pattern of how you actually invest.</h3>
+            <h3 className="text-lg font-bold text-black">Get ready to confront your true investment instincts</h3>
           </div>
 
           <button
             onClick={() => navigate('/intake')}
-            className="btn-primary w-full text-lg py-4"
+            className="btn-primary w-full text-lg py-4 shadow-btn"
           >
-            Let's Start
+            Let's Start!
           </button>
         </div>
-        <p className="text-sm text-gray-500">
-          Feels like stepping into a partner meeting, but slightly relaxed.
-        </p>
-        <p className="text-sm text-gray-500">
-          Response to every scenario uncovers how you decide where to invest. Together 5 scenarios reveal what your decisions actually show.
+        <p className="text-mr-3 text-gray-500">
+          Five scenarios. One truth: how you actually make investment decisions.
         </p>
       </div>
     </div>

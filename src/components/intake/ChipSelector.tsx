@@ -61,7 +61,7 @@ export function ChipSelector({
             key={item}
             type="button"
             onClick={() => toggleSelection(item)}
-            className="inline-flex items-center px-4 py-2 rounded-full border-2 border-primary-500 bg-primary-50 text-primary-900 font-semibold cursor-pointer transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            className="inline-flex items-center px-4 py-2 rounded-full border-2 border-primary-500 bg-primary-50 text-primary-900 font-semibold cursor-pointer transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 shadow-chip"
           >
             {item}
           </button>
@@ -73,7 +73,7 @@ export function ChipSelector({
             key={option}
             type="button"
             onClick={() => toggleSelection(option)}
-            className="inline-flex items-center px-4 py-2 rounded-full border-2 border-gray-300 bg-white text-black hover:border-black font-medium cursor-pointer transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            className="inline-flex items-center px-4 py-2 rounded-full border-2 border-gray-300 bg-white text-black hover:border-black font-medium cursor-pointer transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 shadow-chip hover:shadow-btn"
           >
             {option}
           </button>

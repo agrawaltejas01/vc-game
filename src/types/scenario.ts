@@ -1,6 +1,7 @@
 // Scenario-related types
 
 export interface Business {
+  company_name: string;
   one_liner: string;
   description: string;
   business_model: string;

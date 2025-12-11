@@ -48,7 +48,7 @@ export function GameProvider({ children }: GameProviderProps) {
   const [gameId, setGameId] = useState<string | null>(null);
   const [gameState, setGameState] = useState<GameState>({
     current_index: 0,
-    max_scenarios: 2, // maximum scenarios in the game
+    max_scenarios: 5, // maximum scenarios in the game
     is_completed: false,
   });
   const [currentScenario, setCurrentScenarioState] = useState<Scenario | null>(null);
@@ -102,7 +102,7 @@ export function GameProvider({ children }: GameProviderProps) {
     setGameId(null);
     setGameState({
       current_index: 0,
-      max_scenarios: 2, //maximum scenarios in the game
+      max_scenarios: 5, //maximum scenarios in the game
       is_completed: false,
     });
     setCurrentScenarioState(null);

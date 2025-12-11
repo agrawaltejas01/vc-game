@@ -117,7 +117,7 @@ export function Summary() {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
         <div className="text-center space-y-4">
-          <p className="text-red-600">{error}</p>
+          <p className="text-semantic-error">{error}</p>
           <button onClick={handlePlayAgain} className="btn-primary">
             Start Over
           </button>
@@ -131,10 +131,10 @@ export function Summary() {
       <div className="max-w-5xl mx-auto space-y-8">
         <div className="text-center">
           <h2 className="text-4xl font-bold text-black mb-3">
-            Your Investor Profile
+            Your Intuition Profile
           </h2>
           <p className="text-gray-600">
-            Based on your responses to {investorProfile ? 'the scenarios' : '6 scenarios'}
+            Based on your responses to the scenarios
           </p>
         </div>
 

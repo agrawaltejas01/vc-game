@@ -14,6 +14,7 @@ export const mockScenarios: Scenario[] = [
     stage: 'Pre-seed',
     sector: 'SaaS',
     business: {
+      company_name: 'Project Rocketship',
       one_liner: 'AI-powered sales intelligence platform for B2B SaaS companies',
       description: 'Outbound helps B2B sales teams identify and prioritize high-intent prospects using proprietary AI models that analyze behavioral signals across 50+ data sources. The platform provides real-time alerts when prospects enter buying windows, dramatically improving SDR efficiency and conversion rates.',
       business_model: 'Usage-based SaaS subscription ($99/user/month) with volume discounts for enterprise. Average 15 users per customer.',
@@ -57,6 +58,7 @@ export const mockScenarios: Scenario[] = [
     stage: 'Seed',
     sector: 'AI Infrastructure',
     business: {
+      company_name: 'Project Rocketship 2',
       one_liner: 'Serverless vector database optimized for real-time AI applications',
       description: 'VectorFlow provides a fully managed vector database that is 10x faster than alternatives like Pinecone and Weaviate for real-time similarity search. The product uses novel indexing algorithms developed through academic research. Customers include several fast-growing AI startups building RAG applications.',
       business_model: 'Consumption-based pricing: $0.40 per million vector operations + $0.10/GB storage per month',
@@ -109,6 +111,7 @@ export const mockScenarios: Scenario[] = [
     stage: 'Series A',
     sector: 'Fintech Infrastructure',
     business: {
+      company_name: 'Project Rocketship 3',
       one_liner: 'Payment infrastructure for vertical SaaS platforms enabling embedded finance',
       description: 'VertexPay allows vertical SaaS companies (real estate, healthcare, legal) to embed payment processing, banking, and lending directly into their platforms with minimal integration work. The platform handles compliance, KYC/AML, and regulatory requirements. 45+ vertical SaaS platforms currently using the product.',
       business_model: 'Revenue share: 15-25 bps on payment volume + $500-2K/month platform fee per customer',
@@ -163,6 +166,7 @@ export const mockScenarios: Scenario[] = [
     stage: 'Pre-seed',
     sector: 'Deeptech',
     business: {
+      company_name: 'Project Rocketship 4',
       one_liner: 'Novel battery technology for long-duration energy storage using sustainable materials',
       description: 'EnergyCore has developed a proprietary sodium-ion battery chemistry that achieves energy density comparable to lithium-ion at 40% lower cost. The technology uses abundant materials (sodium, iron) and could revolutionize grid-scale energy storage. Currently at lab-scale with plans to build pilot manufacturing.',
       business_model: 'Future: B2B sales to energy companies and utilities. Licensing IP to manufacturers. Currently pre-revenue.',

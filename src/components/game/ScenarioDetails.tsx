@@ -13,12 +13,14 @@ export function ScenarioDetails({ scenario }: ScenarioDetailsProps) {
       <div className="flex flex-wrap gap-2">
         <span className="badge-primary">{scenario.stage}</span>
         <span className="badge-secondary">{scenario.sector}</span>
+        
       </div>
 
       {/* Business Overview */}
       <div>
-        <h2 className="text-2xl font-bold text-black mb-3">{business.one_liner}</h2>
+        <h2 className="text-2xl font-bold text-black mb-3">{business.company_name}</h2>
         <div className="prose prose-sm max-w-none text-gray-700">
+          <p>{business.one_liner}</p>
           <p>{business.description}</p>
         </div>
         <div className="mt-3">
@@ -28,12 +30,12 @@ export function ScenarioDetails({ scenario }: ScenarioDetailsProps) {
           {(business.is_pre_product || business.is_pre_revenue) && (
             <div className="mt-2">
               {business.is_pre_product && (
-                <span className="inline-block px-3 py-1 bg-accent-gold-light text-accent-gold text-xs font-bold rounded-full border border-accent-gold">
+                <span className="inline-block px-3 py-1 bg-accent-gold-light text-accent-gold text-xs font-bold rounded-full border border-accent-gold shadow-chip">
                   Pre-product
                 </span>
               )}
               {business.is_pre_revenue && !business.is_pre_product && (
-                <span className="inline-block px-3 py-1 bg-accent-gold-light text-accent-gold text-xs font-bold rounded-full border border-accent-gold">
+                <span className="inline-block px-3 py-1 bg-accent-gold-light text-accent-gold text-xs font-bold rounded-full border border-accent-gold shadow-chip">
                   Pre-revenue
                 </span>
               )}
@@ -90,6 +92,12 @@ export function ScenarioDetails({ scenario }: ScenarioDetailsProps) {
             <p className="text-gray-600">Lead Status</p>
             <p className="font-semibold text-gray-900 capitalize">{'leading'}</p>
           </div> */}
+          {round_details.round_dynamics_notes && round_details.round_dynamics_notes.length > 0 && (
+            <div className="col-span-2">
+              <p className="text-gray-600 text-xs font-semibold uppercase tracking-wide">Round Dynamics</p>
+              <p className="text-sm text-gray-700">{round_details.round_dynamics_notes}</p>
+            </div>
+          )}
           {round_details.other_investors && round_details.other_investors.length > 0 && (
             <div className="col-span-2">
               <p className="text-gray-600 text-xs font-semibold uppercase tracking-wide">Other Investors</p>
@@ -102,7 +110,7 @@ export function ScenarioDetails({ scenario }: ScenarioDetailsProps) {
       {/* Traction Snapshot */}
       {traction_snapshot ? (
         <div className="card-accent-cyan">
-          <h3 className="text-lg font-bold text-black mb-3">Traction</h3>
+          <h3 className="text-lg font-bold text-black mb-3">Metrics and Traction</h3>
           <div className="space-y-2 text-sm">
             {traction_snapshot.revenue_arr_mrr && (
               <div>
