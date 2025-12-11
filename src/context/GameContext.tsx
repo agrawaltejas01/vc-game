@@ -15,6 +15,11 @@ interface GameContextType {
   isLoading: boolean;
   error: string | null;
 
+  // Engagement tracking state
+  hasSeenVector: boolean;
+  previousMetrics: InvestorVector['quantitative_metrics'] | null;
+  newInsightIds: string[];
+
   // Actions
   setInvestorProfile: (profile: InvestorProfile, id: string) => void;
   setCurrentScenario: (scenario: Scenario) => void;
@@ -25,6 +30,11 @@ interface GameContextType {
   resetGame: () => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+
+  // Engagement tracking actions
+  setHasSeenVector: (seen: boolean) => void;
+  updatePreviousMetrics: (metrics: InvestorVector['quantitative_metrics']) => void;
+  markInsightsAsSeen: (ids: string[]) => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -38,7 +48,7 @@ export function GameProvider({ children }: GameProviderProps) {
   const [gameId, setGameId] = useState<string | null>(null);
   const [gameState, setGameState] = useState<GameState>({
     current_index: 0,
-    max_scenarios: 6,
+    max_scenarios: 2, // maximum scenarios in the game
     is_completed: false,
   });
   const [currentScenario, setCurrentScenarioState] = useState<Scenario | null>(null);
@@ -46,6 +56,11 @@ export function GameProvider({ children }: GameProviderProps) {
   const [gameSummary, setGameSummaryState] = useState<GameSummary | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Engagement tracking state
+  const [hasSeenVector, setHasSeenVector] = useState(false);
+  const [previousMetrics, setPreviousMetrics] = useState<InvestorVector['quantitative_metrics'] | null>(null);
+  const [newInsightIds, setNewInsightIds] = useState<string[]>([]);
 
   const setInvestorProfile = useCallback((profile: InvestorProfile, id: string) => {
     setInvestorProfileState(profile);
@@ -87,13 +102,17 @@ export function GameProvider({ children }: GameProviderProps) {
     setGameId(null);
     setGameState({
       current_index: 0,
-      max_scenarios: 6,
+      max_scenarios: 2, //maximum scenarios in the game
       is_completed: false,
     });
     setCurrentScenarioState(null);
     setInvestorVectorState(null);
     setGameSummaryState(null);
     setError(null);
+    // Reset engagement tracking
+    setHasSeenVector(false);
+    setPreviousMetrics(null);
+    setNewInsightIds([]);
   }, []);
 
   const setLoading = useCallback((loading: boolean) => {
@@ -102,6 +121,15 @@ export function GameProvider({ children }: GameProviderProps) {
 
   const setErrorCallback = useCallback((err: string | null) => {
     setError(err);
+  }, []);
+
+  // Engagement tracking callbacks
+  const updatePreviousMetrics = useCallback((metrics: InvestorVector['quantitative_metrics']) => {
+    setPreviousMetrics(metrics);
+  }, []);
+
+  const markInsightsAsSeen = useCallback((ids: string[]) => {
+    setNewInsightIds(prev => prev.filter(id => !ids.includes(id)));
   }, []);
 
   const value: GameContextType = {
@@ -113,6 +141,9 @@ export function GameProvider({ children }: GameProviderProps) {
     gameSummary,
     isLoading,
     error,
+    hasSeenVector,
+    previousMetrics,
+    newInsightIds,
     setInvestorProfile,
     setCurrentScenario,
     setInvestorVector,
@@ -122,6 +153,9 @@ export function GameProvider({ children }: GameProviderProps) {
     resetGame,
     setLoading,
     setError: setErrorCallback,
+    setHasSeenVector,
+    updatePreviousMetrics,
+    markInsightsAsSeen,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

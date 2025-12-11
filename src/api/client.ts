@@ -3,7 +3,7 @@ import { ApiResponse, ApiError } from '../types/api';
 
 // Configuration
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
-const USE_MOCK = import.meta.env.VITE_USE_MOCK !== 'false'; // Default to true for development
+const USE_MOCK = false // update this to mock data
 
 export class ApiClient {
   private baseUrl: string;

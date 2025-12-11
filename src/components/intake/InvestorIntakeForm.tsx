@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { InvestorProfile, Stage, Geography, EvaluationWeights } from '../../types/investor';
+import { InvestorProfile, Stage, EvaluationWeights } from '../../types/investor';
 import { validateWeightagesSum, getWeightagesSum } from '../../utils/validation';
 import { StageSelect } from './StageSelect';
 import { WeightageSliders } from './WeightageSliders';
@@ -10,12 +10,13 @@ interface InvestorIntakeFormProps {
 }
 
 const COMMON_SECTORS = ['fintech', 'ai', 'healthtech', 'consumer', 'saas', 'enterprise', 'deeptech', 'edtech', 'defence', 'gambling'];
+const DEFAULT_GEOGRAPHIES = ['India'];
 
 export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
   const [preferredSectors, setPreferredSectors] = useState<string[]>([]);
   const [avoidedSectors, setAvoidedSectors] = useState<string[]>([]);
   const [stageFocus, setStageFocus] = useState<Stage[]>([]);
-  const [geographyFocus, setGeographyFocus] = useState<Geography[]>([]);
+  const [geographyFocus, setGeographyFocus] = useState<string[]>(['India']);
   const [evaluationWeights, setEvaluationWeights] = useState<EvaluationWeights>({
     founders: 30,
     sector_market: 25,
@@ -132,10 +133,11 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
         <ChipSelector
           label="Geography Focus"
           required={true}
-          options={Object.values(Geography)}
+          options={DEFAULT_GEOGRAPHIES}
           selected={geographyFocus}
           onChange={setGeographyFocus}
-          allowCustom={false}
+          allowCustom={true}
+          customPlaceholder="Enter geography name"
         />
         {errors.geographyFocus && (
           <p className="error-text mt-2">{errors.geographyFocus}</p>

@@ -223,7 +223,8 @@ export async function submitScenarioResponse(payload: {
 export async function submitAndGetNext(payload: {
   gameId: string;
   currentQuestionIndex: number;
-  audioBlob: Blob;
+  textResponse?: string;
+  audioBlob?: Blob;
 }): Promise<NextQuestionResponse> {
   if (apiClient.isUsingMock()) {
     await delay(1200);
@@ -232,6 +233,13 @@ export async function submitAndGetNext(payload: {
     if (!profile) {
       throw new Error('Game session not found');
     }
+
+    // Log submission type
+    console.log('Mock submission:', {
+      hasText: !!payload.textResponse,
+      hasAudio: !!payload.audioBlob,
+      textLength: payload.textResponse?.length || 0,
+    });
 
     // Update scenario index
     const currentIndex = mockStorage.currentScenarioIndex.get(payload.gameId) || 0;
@@ -267,7 +275,16 @@ export async function submitAndGetNext(payload: {
   const formData = new FormData();
   formData.append('gameId', payload.gameId);
   formData.append('currentQuestionIndex', payload.currentQuestionIndex.toString());
-  formData.append('audio', payload.audioBlob, 'response.webm');
+
+  // Conditionally add text response
+  if (payload.textResponse) {
+    formData.append('textResponse', payload.textResponse);
+  }
+
+  // Conditionally add audio
+  if (payload.audioBlob) {
+    formData.append('audio', payload.audioBlob, 'response.webm');
+  }
 
   const baseUrl = apiClient['baseUrl'] || 'http://13.200.21.218:3000';
   const response = await fetch(`${baseUrl}/api/game/next-question`, {

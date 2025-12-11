@@ -28,6 +28,6 @@ export interface InvestorProfile {
   preferred_sectors: string[];
   avoided_sectors: string[];
   stage_focus: Stage[];
-  geography_focus: Geography[];
+  geography_focus: string[];
   evaluation_weights: EvaluationWeights;
 }

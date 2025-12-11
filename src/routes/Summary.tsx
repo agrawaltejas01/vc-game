@@ -6,6 +6,7 @@ import { ArchetypeCard } from '../components/summary/ArchetypeCard';
 import { DecisionPatterns } from '../components/summary/DecisionPatterns';
 import { LoadingOverlay } from '../components/common/LoadingOverlay';
 import { scrollToTop } from '../utils/scrollToTop';
+import { isFeatureEnabled } from '../config/engagementFeatures';
 
 export function Summary() {
   const navigate = useNavigate();
@@ -13,15 +14,43 @@ export function Summary() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Staggered reveal state
+  const [showSections, setShowSections] = useState({
+    archetype: false,
+    patterns: false,
+    comparison: false,
+    breakdown: false,
+    actions: false
+  });
+
   // Scroll to top on mount
   useEffect(() => {
     scrollToTop();
   }, []);
 
-  // Scroll to top when summary loads
+  // Scroll to top when summary loads and trigger staggered reveal
   useEffect(() => {
     if (gameSummary) {
       scrollToTop();
+
+      // Trigger staggered reveal if feature is enabled
+      if (!isFeatureEnabled('showSummaryStaggeredReveal')) {
+        setShowSections({
+          archetype: true,
+          patterns: true,
+          comparison: true,
+          breakdown: true,
+          actions: true
+        });
+        return;
+      }
+
+      // Staggered reveal sequence
+      setTimeout(() => setShowSections(prev => ({ ...prev, archetype: true })), 200);
+      setTimeout(() => setShowSections(prev => ({ ...prev, patterns: true })), 700);
+      setTimeout(() => setShowSections(prev => ({ ...prev, comparison: true })), 1000);
+      setTimeout(() => setShowSections(prev => ({ ...prev, breakdown: true })), 1300);
+      setTimeout(() => setShowSections(prev => ({ ...prev, actions: true })), 1600);
     }
   }, [gameSummary]);
 
@@ -91,17 +120,25 @@ export function Summary() {
         </div>
 
         {/* Archetype Card */}
-        <ArchetypeCard
-          archetypeName={gameSummary.archetype_name}
-          description={gameSummary.archetype_description}
-        />
+        {showSections.archetype && (
+          <div className="animate-scale-in">
+            <ArchetypeCard
+              archetypeName={gameSummary.archetype_name}
+              description={gameSummary.archetype_description}
+            />
+          </div>
+        )}
 
         {/* Decision Patterns */}
-        <DecisionPatterns patterns={gameSummary.decision_patterns} />
+        {showSections.patterns && (
+          <div className="animate-slide-up">
+            <DecisionPatterns patterns={gameSummary.decision_patterns} />
+          </div>
+        )}
 
         {/* Comparison to Initial Preferences */}
-        {investorProfile && gameSummary.comparison_to_initial.length > 0 && (
-          <div className="card">
+        {investorProfile && gameSummary.comparison_to_initial.length > 0 && showSections.comparison && (
+          <div className="card animate-slide-up">
             <h3 className="text-xl font-bold text-black mb-4">
               Stated vs. Revealed Preferences
             </h3>
@@ -129,6 +166,14 @@ export function Summary() {
                           : comparison.alignment === 'partially_aligned'
                           ? 'bg-accent-gold-light text-accent-gold border-accent-gold'
                           : 'bg-semantic-errorLight text-semantic-error border-semantic-error'
+                      } ${
+                        isFeatureEnabled('showAlignmentBadgeAnimations')
+                          ? comparison.alignment === 'aligned'
+                            ? 'animate-scale-bounce'
+                            : comparison.alignment === 'misaligned'
+                            ? 'animate-shake'
+                            : ''
+                          : ''
                       }`}
                     >
                       {comparison.alignment.replace('_', ' ')}
@@ -142,97 +187,101 @@ export function Summary() {
         )}
 
         {/* Evaluation Breakdown Chart */}
-        <div className="card">
-          <h3 className="text-xl font-bold text-black mb-4">
-            Your Revealed Evaluation Weights
-          </h3>
-          <div className="space-y-4">
-            <div>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-700 font-medium">Founders / Team</span>
-                <span className="font-bold text-black">
-                  {gameSummary.evaluation_breakdown.founders}%
-                </span>
+        {showSections.breakdown && (
+          <div className="card animate-slide-up">
+            <h3 className="text-xl font-bold text-black mb-4">
+              Your Revealed Evaluation Weights
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-gray-700 font-medium">Founders / Team</span>
+                  <span className="font-bold text-black">
+                    {gameSummary.evaluation_breakdown.founders}%
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-4">
+                  <div
+                    className="bg-black h-4 rounded-full transition-all"
+                    style={{ width: `${gameSummary.evaluation_breakdown.founders}%` }}
+                  />
+                </div>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-4">
-                <div
-                  className="bg-black h-4 rounded-full transition-all"
-                  style={{ width: `${gameSummary.evaluation_breakdown.founders}%` }}
-                />
-              </div>
-            </div>
 
-            <div>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-700 font-medium">Sector / Market</span>
-                <span className="font-bold text-black">
-                  {gameSummary.evaluation_breakdown.sector_market}%
-                </span>
+              <div>
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-gray-700 font-medium">Sector / Market</span>
+                  <span className="font-bold text-black">
+                    {gameSummary.evaluation_breakdown.sector_market}%
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-4">
+                  <div
+                    className="bg-black h-4 rounded-full transition-all"
+                    style={{ width: `${gameSummary.evaluation_breakdown.sector_market}%` }}
+                  />
+                </div>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-4">
-                <div
-                  className="bg-black h-4 rounded-full transition-all"
-                  style={{ width: `${gameSummary.evaluation_breakdown.sector_market}%` }}
-                />
-              </div>
-            </div>
 
-            <div>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-700 font-medium">Traction</span>
-                <span className="font-bold text-black">
-                  {gameSummary.evaluation_breakdown.traction}%
-                </span>
+              <div>
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-gray-700 font-medium">Traction</span>
+                  <span className="font-bold text-black">
+                    {gameSummary.evaluation_breakdown.traction}%
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-4">
+                  <div
+                    className="bg-black h-4 rounded-full transition-all"
+                    style={{ width: `${gameSummary.evaluation_breakdown.traction}%` }}
+                  />
+                </div>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-4">
-                <div
-                  className="bg-black h-4 rounded-full transition-all"
-                  style={{ width: `${gameSummary.evaluation_breakdown.traction}%` }}
-                />
-              </div>
-            </div>
 
-            <div>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-700 font-medium">Product / Technology</span>
-                <span className="font-bold text-black">
-                  {gameSummary.evaluation_breakdown.product_tech}%
-                </span>
+              <div>
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-gray-700 font-medium">Product / Technology</span>
+                  <span className="font-bold text-black">
+                    {gameSummary.evaluation_breakdown.product_tech}%
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-4">
+                  <div
+                    className="bg-black h-4 rounded-full transition-all"
+                    style={{ width: `${gameSummary.evaluation_breakdown.product_tech}%` }}
+                  />
+                </div>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-4">
-                <div
-                  className="bg-black h-4 rounded-full transition-all"
-                  style={{ width: `${gameSummary.evaluation_breakdown.product_tech}%` }}
-                />
-              </div>
-            </div>
 
-            <div>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-700 font-medium">Round Dynamics</span>
-                <span className="font-bold text-black">
-                  {gameSummary.evaluation_breakdown.round_dynamics}%
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-4">
-                <div
-                  className="bg-black h-4 rounded-full transition-all"
-                  style={{ width: `${gameSummary.evaluation_breakdown.round_dynamics}%` }}
-                />
+              <div>
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-gray-700 font-medium">Round Dynamics</span>
+                  <span className="font-bold text-black">
+                    {gameSummary.evaluation_breakdown.round_dynamics}%
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-4">
+                  <div
+                    className="bg-black h-4 rounded-full transition-all"
+                    style={{ width: `${gameSummary.evaluation_breakdown.round_dynamics}%` }}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Actions */}
-        <div className="flex justify-center space-x-4 pt-4">
-          <button onClick={handlePlayAgain} className="btn-primary px-8">
-            Play Again
-          </button>
-          <button disabled className="btn-disabled">
-            Share Results (Coming Soon)
-          </button>
-        </div>
+        {showSections.actions && (
+          <div className="flex justify-center space-x-4 pt-4 animate-fade-in">
+            <button onClick={handlePlayAgain} className="btn-primary px-8">
+              Play Again
+            </button>
+            <button disabled className="btn-disabled">
+              Share Results (Coming Soon)
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
