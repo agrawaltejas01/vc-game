@@ -10,7 +10,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#FAF7F2' }}>
       {location.pathname !== '/' && <Header />}
       <main className="flex-1">
         {children}

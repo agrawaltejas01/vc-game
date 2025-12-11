@@ -63,7 +63,7 @@ export function Landing() {
             onClick={() => navigate('/intake')}
             className="btn-primary w-full text-lg py-4 shadow-btn"
           >
-            Let's Start!
+            Reflect w/ AI
           </button>
         </div>
         <p className="text-mr-3 text-gray-500">

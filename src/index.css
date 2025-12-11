@@ -4,7 +4,8 @@
 
 @layer base {
   body {
-    @apply bg-white text-black antialiased;
+    @apply text-black antialiased;
+    background-color: #FAF7F2;
     font-family: 'Exo 2', sans-serif;
   }
 

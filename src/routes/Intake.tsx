@@ -65,7 +65,7 @@ export function Intake() {
             Your Criteria
           </h2>
           <p className="text-gray-600">
-            Set your core investment preferences. The scenarios will be generated accordingly.
+            Set your core investment preferences. The scenarios will be generated w/ AI reasoning models accordingly.
           </p>
         </div>
 
