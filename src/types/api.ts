@@ -77,3 +77,14 @@ export interface GetSummaryResponse {
   summary: GameSummary;
   message: string;
 }
+
+// Email Submission API
+export interface SubmitEmailRequest {
+  gameId: string;
+  email: string;
+}
+
+export interface SubmitEmailResponse {
+  success: boolean;
+  message: string;
+}

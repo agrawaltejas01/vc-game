@@ -7,6 +7,7 @@ import {
   GetNextScenarioResponse,
   SubmitResponseResponse,
   GetSummaryResponse,
+  SubmitEmailResponse,
 } from '../types/api';
 import { apiClient } from './client';
 import {
@@ -333,6 +334,26 @@ export async function getGameSummary(gameId: string): Promise<GetSummaryResponse
 
   if (!response.success || !response.data) {
     throw new Error(response.error?.message || 'Failed to fetch game summary');
+  }
+
+  return response.data;
+}
+
+/**
+ * Submit email for game follow-up
+ */
+export async function submitEmail(
+  gameId: string,
+  email: string
+): Promise<SubmitEmailResponse> {
+  // Real API call - POST request with JSON body
+  const response = await apiClient.post<SubmitEmailResponse>(
+    '/api/game/submitEmail',
+    { gameId, email }
+  );
+
+  if (!response.success || !response.data) {
+    throw new Error(response.error?.message || 'Failed to submit email');
   }
 
   return response.data;

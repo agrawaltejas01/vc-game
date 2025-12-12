@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { useGameContext } from '../../context/GameContext';
+import { submitEmail } from '../../api/endpoints';
 
 export function EmailCaptureCard() {
+  const { gameId } = useGameContext();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,12 +30,16 @@ export function EmailCaptureCard() {
     setError('');
     setIsSubmitting(true);
 
-    // TODO: API call will be implemented separately
-    // For now, just log the email
-    console.log('Email submitted:', email);
+    try {
+      // Validate gameId exists
+      if (!gameId) {
+        throw new Error('Game session not found. Please try again.');
+      }
 
-    // Simulate API call
-    setTimeout(() => {
+      // Submit email to API
+      await submitEmail(gameId, email);
+
+      // Show success state
       setIsSubmitting(false);
       setIsSuccess(true);
 
@@ -40,7 +47,10 @@ export function EmailCaptureCard() {
       setTimeout(() => {
         setIsSuccess(false);
       }, 3000);
-    }, 1000);
+    } catch (err) {
+      setIsSubmitting(false);
+      setError(err instanceof Error ? err.message : 'Failed to submit email. Please try again.');
+    }
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
