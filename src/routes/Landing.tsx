@@ -22,13 +22,13 @@ export function Landing() {
             />
           </div>
           <div className="space-y-2">
-            <p className="text-xl text-gray-700 max-w-xl mx-auto">
-              Only conviction survives~
+            <p className="text-2xl text-gray-700 max-w-xl mx-auto">
+              AI-powered Judgment Game for VCs
             </p>
 
           </div>
-          <p className="text-2xl text-gray-700 max-w-xl mx-auto">
-            Every deal is a battle of instincts!
+            <p className="text-xl text-gray-700 max-w-xl mx-auto">
+            only conviction survives~
           </p>
         </div>
 
@@ -51,19 +51,19 @@ export function Landing() {
               <li className="flex items-start">
                 <span className="text-primary-500 mr-3 text-xl font-bold">✓</span>
                 <span className="text-gray-700">
-                  Reveal your evolving decision vector
+                  Reveal your true decision vector
                 </span>
               </li>
               
             </ul>
-            <h3 className="text-lg font-bold text-black">Get ready to confront your true investment instincts</h3>
+            <h3 className="text-lg font-bold text-black">Every deal is a battle of instincts: you vs YOU</h3>
           </div>
 
           <button
             onClick={() => navigate('/intake')}
             className="btn-primary w-full text-lg py-4 shadow-btn"
           >
-            Reflect w/ AI
+            Get Started!
           </button>
         </div>
         <p className="text-mr-3 text-gray-500">
