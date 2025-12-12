@@ -22,6 +22,7 @@ export function Game() {
     investorVector,
     setCurrentScenario,
     setInvestorVector,
+    setGameSummary,
     incrementScenarioIndex,
     completeGame,
     setLoading,
@@ -43,7 +44,8 @@ export function Game() {
   const [showMidpointModal, setShowMidpointModal] = useState(false);
   const [showPreFinalAlert, setShowPreFinalAlert] = useState(false);
   const [vectorHighlight, setVectorHighlight] = useState(false);
-  const [showVectorNotificationDot, setShowVectorNotificationDot] = useState(false);
+  const [showVectorNotificationDot, setShowVectorNotificationDot] =
+    useState(false);
   const vectorNotificationTimerRef = useRef<number | null>(null);
 
   // Warn user before refresh/close to prevent losing progress
@@ -54,15 +56,15 @@ export function Game() {
         e.preventDefault();
         // Modern browsers ignore custom messages and show default warning
         // But we still need to set returnValue for the warning to appear
-        e.returnValue = '';
-        return '';
+        e.returnValue = "";
+        return "";
       }
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [gameId, currentScenario]);
 
@@ -83,7 +85,8 @@ export function Game() {
   // Scroll to top when mobile tab changes
   useEffect(() => {
     // Only scroll on mobile when switching tabs
-    if (window.innerWidth < 1024) {  // lg breakpoint
+    if (window.innerWidth < 1024) {
+      // lg breakpoint
       scrollToTop();
     }
   }, [activeTab]);
@@ -115,23 +118,30 @@ export function Game() {
     setLoading(true);
 
     try {
+      // Check if this is the last question
+      const isLastQuestion =
+        gameState.current_index + 1 >= gameState.max_scenarios;
+
       const response = await submitAndGetNext({
         gameId,
         currentQuestionIndex: gameState.current_index, // Starts at 1 for first submission
         investment_decision,
         textResponse,
         audioBlob,
+        isLastQuestion,
       });
 
-      if (
-        response.gameCompleted ||
-        // Revert before pushing -- gameState.max_scenarios
-        gameState.current_index + 1 >= gameState.max_scenarios
-      ) {
-        // Game complete
+      // Check if response contains summary (GetSummaryResponse)
+      if ("summary" in response && response.summary) {
+        // Last question response - contains summary
+        setGameSummary(response.summary);
         completeGame();
         navigate("/summary");
-      } else if (response.scenario) {
+      } else if ("gameCompleted" in response && response.gameCompleted) {
+        // Fallback for old API behavior
+        completeGame();
+        navigate("/summary");
+      } else if ("scenario" in response && response.scenario) {
         // Move to next scenario
         setCurrentScenario(response.scenario);
         if (response.scenario.investor_vector) {
@@ -143,43 +153,51 @@ export function Game() {
         const nextIndex = gameState.current_index + 1;
 
         // Feature 1 & 2: First decision toast + vector highlight
-        if (nextIndex === 1 && isFeatureEnabled('showFirstDecisionToast') && !hasSeenVector) {
+        if (
+          nextIndex === 1 &&
+          isFeatureEnabled("showFirstDecisionToast") &&
+          !hasSeenVector
+        ) {
           showToast({
             message: "✨ Your Decision Vector is Live!",
-            description: "Your investment preferences are being revealed in real-time",
+            description:
+              "Your investment preferences are being revealed in real-time",
             type: "info",
             action: {
-              label: window.innerWidth < 1024 ? "Switch to Vector tab" : "Check it out →",
+              label:
+                window.innerWidth < 1024
+                  ? "Switch to Vector tab"
+                  : "Check it out →",
               onClick: () => {
                 if (window.innerWidth < 1024) {
-                  setActiveTab('profile');
+                  setActiveTab("profile");
                 }
-              }
-            }
+              },
+            },
           });
           setHasSeenVector(true);
 
-          if (isFeatureEnabled('showVectorPanelHighlight')) {
+          if (isFeatureEnabled("showVectorPanelHighlight")) {
             setVectorHighlight(true);
             setTimeout(() => setVectorHighlight(false), 2000);
           }
         }
 
         // Feature 6: Midpoint celebration
-        if (nextIndex === 3 && isFeatureEnabled('showMidpointCelebration')) {
+        if (nextIndex === 3 && isFeatureEnabled("showMidpointCelebration")) {
           setShowMidpointModal(true);
         }
 
         // Feature 9: Pre-final alert
-        if (nextIndex === 4 && isFeatureEnabled('showPreFinalAlert')) {
+        if (nextIndex === 4 && isFeatureEnabled("showPreFinalAlert")) {
           setShowPreFinalAlert(true);
         }
 
         // Feature 16: Mobile vector notification dot
         if (
-          isFeatureEnabled('showMobileVectorNotificationDot') &&
+          isFeatureEnabled("showMobileVectorNotificationDot") &&
           window.innerWidth < 1024 &&
-          activeTab === 'scenario'
+          activeTab === "scenario"
         ) {
           setShowVectorNotificationDot(true);
 
@@ -218,11 +236,12 @@ export function Game() {
     "Identifying your investor archetype...",
     "Calculating alignment scores...",
     "Generating personalized insights...",
-    "✓ Profile Complete!"
+    "✓ Profile Complete!",
   ];
 
   // Check if this is the final submission
-  const isFinalSubmission = isSubmitting && gameState.current_index + 1 >= gameState.max_scenarios;
+  const isFinalSubmission =
+    isSubmitting && gameState.current_index + 1 >= gameState.max_scenarios;
 
   return (
     <div className="h-[calc(100vh-4rem)] bg-gray-50 flex flex-col">
@@ -239,7 +258,7 @@ export function Game() {
       />
 
       {/* Pre-Final Alert Banner */}
-      {showPreFinalAlert && isFeatureEnabled('showPreFinalAlert') && (
+      {showPreFinalAlert && isFeatureEnabled("showPreFinalAlert") && (
         <div className="card-accent-gold mx-4 mb-4 animate-slide-down relative">
           <button
             onClick={() => setShowPreFinalAlert(false)}
@@ -247,12 +266,19 @@ export function Game() {
             aria-label="Close alert"
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              <path
+                fillRule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
             </svg>
           </button>
-          <h4 className="font-bold text-black mb-2">⚡ Final Scenario Coming Up!</h4>
+          <h4 className="font-bold text-black mb-2">
+            ⚡ Final Scenario Coming Up!
+          </h4>
           <p className="text-sm text-gray-700">
-            One more decision and you'll unlock your complete Investor Archetype Profile.
+            One more decision and you'll unlock your complete Investor Archetype
+            Profile.
           </p>
         </div>
       )}
@@ -266,15 +292,19 @@ export function Game() {
         progressPercent={60}
         primaryAction={{
           label: "Continue Investing",
-          onClick: () => setShowMidpointModal(false)
+          onClick: () => setShowMidpointModal(false),
         }}
-        secondaryAction={window.innerWidth < 1024 ? {
-          label: "View Vector",
-          onClick: () => {
-            setShowMidpointModal(false);
-            setActiveTab('profile');
-          }
-        } : undefined}
+        secondaryAction={
+          window.innerWidth < 1024
+            ? {
+                label: "View Vector",
+                onClick: () => {
+                  setShowMidpointModal(false);
+                  setActiveTab("profile");
+                },
+              }
+            : undefined
+        }
         onClose={() => setShowMidpointModal(false)}
       />
 
@@ -313,12 +343,13 @@ export function Game() {
             `}
           >
             Your Decision Vector
-            {showVectorNotificationDot && isFeatureEnabled('showMobileVectorNotificationDot') && (
-              <span
-                className="absolute top-2 right-2 w-2 h-2 bg-primary-500 rounded-full animate-pulse-dot"
-                aria-label="New updates available"
-              />
-            )}
+            {showVectorNotificationDot &&
+              isFeatureEnabled("showMobileVectorNotificationDot") && (
+                <span
+                  className="absolute top-2 right-2 w-2 h-2 bg-primary-500 rounded-full animate-pulse-dot"
+                  aria-label="New updates available"
+                />
+              )}
           </button>
         </div>
       </div>
@@ -347,7 +378,11 @@ export function Game() {
             className={`
               lg:w-2/5 h-full border-t lg:border-t-0 lg:border-l border-gray-200 bg-white overflow-y-auto
               ${activeTab === "profile" ? "block" : "hidden lg:block"}
-              ${vectorHighlight && isFeatureEnabled('showVectorPanelHighlight') ? 'animate-pulse-border border-3' : ''}
+              ${
+                vectorHighlight && isFeatureEnabled("showVectorPanelHighlight")
+                  ? "animate-pulse-border border-3"
+                  : ""
+              }
             `}
           >
             <InvestorVector vector={investorVector} />

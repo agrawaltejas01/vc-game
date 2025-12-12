@@ -227,7 +227,8 @@ export async function submitAndGetNext(payload: {
   investment_decision: 'not_investing' | 'investing';
   textResponse?: string;
   audioBlob?: Blob;
-}): Promise<NextQuestionResponse> {
+  isLastQuestion?: boolean;
+}): Promise<NextQuestionResponse | GetSummaryResponse> {
   if (apiClient.isUsingMock()) {
     await delay(1200);
 
@@ -250,12 +251,13 @@ export async function submitAndGetNext(payload: {
     mockStorage.currentScenarioIndex.set(payload.gameId, nextIndex);
 
     // Check if game completed (6 total scenarios)
-    if (nextIndex >= mockScenarios.length) {
+    if (nextIndex >= mockScenarios.length || payload.isLastQuestion) {
+      // Return summary response instead of next question response
+      const summary = generateGameSummary(profile);
       return {
         success: true,
-        currentQuestionIndex: nextIndex,
-        gameCompleted: true,
-        message: 'Game completed',
+        summary,
+        message: 'Game summary generated successfully',
       };
     }
 
@@ -279,6 +281,11 @@ export async function submitAndGetNext(payload: {
   formData.append('gameId', payload.gameId);
   formData.append('currentQuestionIndex', payload.currentQuestionIndex.toString());
   formData.append('investment_decision', payload.investment_decision);
+
+  // Add last_question flag if this is the last question
+  if (payload.isLastQuestion) {
+    formData.append('last_question', 'true');
+  }
 
   // Conditionally add text response
   if (payload.textResponse) {
