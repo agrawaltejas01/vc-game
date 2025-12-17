@@ -16,6 +16,8 @@ export enum Geography {
   EUROPE = 'Europe',
 }
 
+export type GameMode = 'quick' | 'detailed';
+
 export interface EvaluationWeights {
   founders: number;
   sector_market: number;
@@ -32,4 +34,5 @@ export interface InvestorProfile {
   evaluation_weights: EvaluationWeights;
   cheque_size_min: string;
   cheque_size_max: string;
+  game_mode: GameMode;
 }

@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { InvestorProfile, Stage, EvaluationWeights } from '../../types/investor';
+import { InvestorProfile, Stage, EvaluationWeights, GameMode } from '../../types/investor';
 import { validateWeightagesSum, getWeightagesSum } from '../../utils/validation';
 import { StageSelect } from './StageSelect';
 import { WeightageSliders } from './WeightageSliders';
 import { ChipSelector } from './ChipSelector';
+import { GameModeToggle } from './GameModeToggle';
 
 interface InvestorIntakeFormProps {
   onSubmit: (profile: InvestorProfile) => void;
@@ -13,6 +14,7 @@ const COMMON_SECTORS = ['SaaS','AI','Fintech','Enterprise Software', 'Consumer',
 const DEFAULT_GEOGRAPHIES = ['India'];
 
 export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
+  const [gameMode, setGameMode] = useState<GameMode>('quick');
   const [preferredSectors, setPreferredSectors] = useState<string[]>([]);
   const [avoidedSectors, setAvoidedSectors] = useState<string[]>([]);
   const [stageFocus, setStageFocus] = useState<Stage[]>([]);
@@ -72,6 +74,7 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
       cheque_size_max: chequeSizeMax,
       geography_focus: geographyFocus,
       evaluation_weights: evaluationWeights,
+      game_mode: gameMode,
     };
 
     onSubmit(profile);
@@ -88,6 +91,11 @@ export function InvestorIntakeForm({ onSubmit }: InvestorIntakeFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8 card">
+      {/* Game Mode */}
+      <div>
+        <GameModeToggle selected={gameMode} onChange={setGameMode} />
+      </div>
+
       {/* Preferred Sectors */}
       <div>
        
