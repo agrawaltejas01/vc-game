@@ -1,10 +1,13 @@
 import { Scenario } from '../../types/scenario';
+import { useGameContext } from '../../context/GameContext';
 
 interface ScenarioDetailsProps {
   scenario: Scenario;
 }
 
 export function ScenarioDetails({ scenario }: ScenarioDetailsProps) {
+  const { investorProfile } = useGameContext();
+  const isQuickMode = investorProfile?.game_mode === 'quick';
   const { business, founder_profile, round_details, traction_snapshot, tension, info_gaps, question_to_investor } = scenario;
 
   return (
@@ -108,57 +111,61 @@ export function ScenarioDetails({ scenario }: ScenarioDetailsProps) {
       </div>
 
       {/* Traction Snapshot */}
-      {traction_snapshot ? (
-        <div className="card-accent-cyan">
-          <h3 className="text-lg font-bold text-black mb-3">Metrics and Traction</h3>
-          <div className="space-y-2 text-sm">
-            {traction_snapshot.revenue_arr_mrr && (
-              <div>
-                <span className="text-gray-600">Revenue:</span>{' '}
-                <span className="font-bold text-black">{traction_snapshot.revenue_arr_mrr}</span>
-              </div>
-            )}
-            {traction_snapshot.growth_rate && (
-              <div>
-                <span className="text-gray-600">Growth:</span>{' '}
-                <span className="font-bold text-black">{traction_snapshot.growth_rate}</span>
-              </div>
-            )}
-            {traction_snapshot.key_metrics && Object.entries(traction_snapshot.key_metrics).map(([key, value]) => (
-              <div key={key}>
-                {/* <span className="text-gray-600 capitalize">{key.replace(/_/g, ' ')}:</span>{' '} */}
-                <span className="font-bold text-black">{value}</span>
-              </div>
-            ))}
+      {!isQuickMode && (
+        traction_snapshot ? (
+          <div className="card-accent-cyan">
+            <h3 className="text-lg font-bold text-black mb-3">Metrics and Traction</h3>
+            <div className="space-y-2 text-sm">
+              {traction_snapshot.revenue_arr_mrr && (
+                <div>
+                  <span className="text-gray-600">Revenue:</span>{' '}
+                  <span className="font-bold text-black">{traction_snapshot.revenue_arr_mrr}</span>
+                </div>
+              )}
+              {traction_snapshot.growth_rate && (
+                <div>
+                  <span className="text-gray-600">Growth:</span>{' '}
+                  <span className="font-bold text-black">{traction_snapshot.growth_rate}</span>
+                </div>
+              )}
+              {traction_snapshot.key_metrics && Object.entries(traction_snapshot.key_metrics).map(([key, value]) => (
+                <div key={key}>
+                  {/* <span className="text-gray-600 capitalize">{key.replace(/_/g, ' ')}:</span>{' '} */}
+                  <span className="font-bold text-black">{value}</span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="card bg-gray-100 border-l-4 border-gray-400">
-          <p className="text-sm text-gray-600 italic">No traction metrics available yet (pre-product/pre-revenue)</p>
-        </div>
+        ) : (
+          <div className="card bg-gray-100 border-l-4 border-gray-400">
+            <p className="text-sm text-gray-600 italic">No traction metrics available yet (pre-product/pre-revenue)</p>
+          </div>
+        )
       )}
 
       {/* Tension */}
-      <div className="card-accent-gold">
-        <h3 className="text-lg font-bold text-black mb-3">IC's Concern</h3>
-        <p className="text-gray-700 mb-3">{tension.description}</p>
-        {tension.key_risks && tension.key_risks.length > 0 && (
-          <div>
-            <p className="text-sm font-semibold text-black mb-2">Key Risks:</p>
-            <ul className="space-y-1">
-              {tension.key_risks.map((risk, idx) => (
-                <li key={idx} className="text-sm text-gray-600 flex items-start">
-                  <span className="text-accent-gold mr-2 font-bold">⚠</span>
-                  <span>{risk}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
+      {!isQuickMode && (
+        <div className="card-accent-gold">
+          <h3 className="text-lg font-bold text-black mb-3">IC's Concern</h3>
+          <p className="text-gray-700 mb-3">{tension.description}</p>
+          {tension.key_risks && tension.key_risks.length > 0 && (
+            <div>
+              <p className="text-sm font-semibold text-black mb-2">Key Risks:</p>
+              <ul className="space-y-1">
+                {tension.key_risks.map((risk, idx) => (
+                  <li key={idx} className="text-sm text-gray-600 flex items-start">
+                    <span className="text-accent-gold mr-2 font-bold">⚠</span>
+                    <span>{risk}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Info Gaps */}
-      {info_gaps && info_gaps.length > 0 && (
+      {!isQuickMode && info_gaps && info_gaps.length > 0 && (
         <div className="card bg-semantic-errorLight border-l-4 border-semantic-error">
           <h3 className="text-lg font-bold text-black mb-3">Missing Information</h3>
           <ul className="space-y-2">
